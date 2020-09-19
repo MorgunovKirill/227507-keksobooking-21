@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Кирилл Моргунов](https://up.htmlacademy.ru/javascript/21/user/227507).
-* Наставник: `Алёна Сиприкова`.
+* Наставник: [Алёна Сиприкова](https://htmlacademy.ru/profile/asiprikova).
 
 ---
 
