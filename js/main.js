@@ -1,78 +1,76 @@
 'use strict';
 
-const PLACE_TYPE = [`palace`, `flat`, `house`, `bungalow`];
+const PLACE_OFFERS = 8;
+const PLACE_TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OPTIONS = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT_OPTIONS = [`12:00`, `13:00`, `14:00`];
 const FEATURES_OPTIONS = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const PHOTO_PATTERN = `http://o0.github.io/assets/images/tokyo/hotel`;
+const PHOTO_EXT = `.jpg`;
 const LOCATION_Y_MIN = 130;
 const LOCATION_Y_MAX = 630;
 const PIN_WIDTH = 50;
 const PIN_HEIGHT = 70;
 
+
 const map = document.querySelector(`.map`);
-
-const getRandomItem = (arr) => {
-  return arr[Math.floor(arr.length * Math.random())];
-};
-
-const getSeveralItems = (arr) => {
-  let output = [getRandomItem(arr)];
-  arr.forEach((element) => {
-    if (!(output.includes(element)) && (Math.random() < 0.5)) {
-      output.push(element);
-    }
-  });
-  return output;
-};
 
 const randomInteger = (min, max) => {
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 };
 
-// const generateAuthor = (maxNumber) => {
-//   return {
-//     avatar: `img/avatars/user0${Math.ceil(Math.random() * maxNumber)}.png`
-//   };
-// };
+const getRandomItem = (arr) => {
+  return arr[randomInteger(0, arr.length - 1)];
+};
 
-// const generateOffer = (title, locationX, locationY, price, type, rooms, guests, checkin, checkout, features, description, photos) => {
-//   return {
-//     title: title.toString(),
-//     address: `${locationX}, ${locationY}`,
-//     price: parseInt(price, 10),
-//     type: getRandomItem(type),
-//     rooms: parseInt(rooms, 10),
-//     guests: parseInt(guests, 10),
-//     checkin: getRandomItem(checkin),
-//     checkout: getRandomItem(checkout),
-//     features: getSeveralItems(features),
-//     description: description.toString(),
-//     photos: getSeveralItems(photos),
-//   };
-// };
+const getSeveralItems = (arr) => {
+  let itemsQuantity = randomInteger(1, arr.length);
+  let output = [];
 
-// const generateAuthor = () => {
-//   return {
-//     avatar: `img/avatars/user0${Math.ceil(Math.random() * 9)}.png`
-//   };
-// };
+  for (let i = 0; i < itemsQuantity; i++) {
+    let item = getRandomItem(arr);
+
+    while (output.includes(item)) {
+      item = getRandomItem(arr);
+    }
+
+    output.push(item);
+  }
+
+  return output;
+};
+
+const getPhotos = (pattern, ext, quantity) => {
+  let output = [];
+  for (let i = 0; i < quantity; i++) {
+    let item = pattern + randomInteger(0, PLACE_OFFERS) + ext;
+    while (output.includes(item)) {
+      item = pattern + randomInteger(0, PLACE_OFFERS) + ext;
+    }
+    output.push(item);
+  }
+
+  return output;
+}
 
 const generateOffer = () => {
-  return {
+  let obj =
+   {
     title: `заголовок`,
-    address: `${Math.ceil(Math.random() * 1000)}, ${Math.ceil(Math.random() * 1000)}`,
+    address: `${randomInteger(0, 1000)}, ${randomInteger(0, 1000)}`,
     price: randomInteger(20000, 100000),
-    type: getRandomItem(PLACE_TYPE),
+    type: getRandomItem(PLACE_TYPES),
     rooms: randomInteger(1, 5),
     guests: randomInteger(1, 8),
     checkin: getRandomItem(CHECKIN_OPTIONS),
     checkout: getRandomItem(CHECKOUT_OPTIONS),
     features: getSeveralItems(FEATURES_OPTIONS),
     description: `описание`,
-    photos: getSeveralItems(PHOTOS),
+    photos: getPhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, PLACE_OFFERS)),
   };
+  console.log(obj);
+  return obj;
 };
 
 const generateLocation = (xMax, yMin, yMax) => {
@@ -109,7 +107,7 @@ const placeTemplate = document.querySelector(`#pin`)
 
 let fragment = document.createDocumentFragment();
 
-for (let i = 1; i < 9; i++) {
+for (let i = 1; i <= PLACE_OFFERS; i++) {
   let author = {
     avatar: `img/avatars/user0${i}.png`
   };
