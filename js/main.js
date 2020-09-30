@@ -1,6 +1,6 @@
 'use strict';
 
-const PLACE_OFFERS = 8;
+const MOCK_MAX = 8;
 const PLACE_TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const CHECKIN_OPTIONS = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT_OPTIONS = [`12:00`, `13:00`, `14:00`];
@@ -11,7 +11,12 @@ const LOCATION_Y_MIN = 130;
 const LOCATION_Y_MAX = 630;
 const PIN_WIDTH = 50;
 const PIN_HEIGHT = 70;
-
+const MIN_PRICE = 0;
+const MAX_PRICE = 1000000;
+const MIN_GUESTS = 1;
+const MAX_GUESTS = 100;
+const MIN_ROOMS = 1;
+const MAX_ROOMS = 100;
 
 const map = document.querySelector(`.map`);
 
@@ -44,38 +49,38 @@ const getSeveralItems = (arr) => {
 const getPhotos = (pattern, ext, quantity) => {
   let output = [];
   for (let i = 0; i < quantity; i++) {
-    let item = pattern + randomInteger(0, PLACE_OFFERS) + ext;
+    let item = pattern + randomInteger(0, MOCK_MAX) + ext;
     while (output.includes(item)) {
-      item = pattern + randomInteger(0, PLACE_OFFERS) + ext;
+      item = pattern + randomInteger(0, MOCK_MAX) + ext;
     }
     output.push(item);
   }
 
   return output;
-}
+};
 
 const generateOffer = () => {
   let obj =
-   {
+  {
     title: `заголовок`,
-    address: `${randomInteger(0, 1000)}, ${randomInteger(0, 1000)}`,
-    price: randomInteger(20000, 100000),
+    address: `600, 350`,
+    price: randomInteger(MIN_PRICE, MAX_PRICE),
     type: getRandomItem(PLACE_TYPES),
-    rooms: randomInteger(1, 5),
-    guests: randomInteger(1, 8),
+    rooms: randomInteger(MIN_ROOMS, MAX_ROOMS),
+    guests: randomInteger(MIN_GUESTS, MAX_GUESTS),
     checkin: getRandomItem(CHECKIN_OPTIONS),
     checkout: getRandomItem(CHECKOUT_OPTIONS),
     features: getSeveralItems(FEATURES_OPTIONS),
     description: `описание`,
-    photos: getPhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, PLACE_OFFERS)),
+    photos: getPhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, MOCK_MAX)),
   };
-  console.log(obj);
+
   return obj;
 };
 
 const generateLocation = (xMax, yMin, yMax) => {
   return {
-    x: Math.floor(Math.random() * xMax),
+    x: randomInteger(0, xMax),
     y: randomInteger(yMin, yMax),
   };
 };
@@ -102,12 +107,12 @@ const renderPlace = function (place) {
 };
 
 const placeTemplate = document.querySelector(`#pin`)
-    .content
-    .querySelector(`.map__pin`);
+  .content
+  .querySelector(`.map__pin`);
 
 let fragment = document.createDocumentFragment();
 
-for (let i = 1; i <= PLACE_OFFERS; i++) {
+for (let i = 1; i <= MOCK_MAX; i++) {
   let author = {
     avatar: `img/avatars/user0${i}.png`
   };
