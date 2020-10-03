@@ -11,6 +11,8 @@ const LOCATION_Y_MIN = 130;
 const LOCATION_Y_MAX = 630;
 const PIN_WIDTH = 50;
 const PIN_HEIGHT = 70;
+const MIN_ADDRESS = 0;
+const MAX_ADDRESS = 1000;
 const MIN_PRICE = 0;
 const MAX_PRICE = 1000000;
 const MIN_GUESTS = 1;
@@ -34,26 +36,16 @@ const getSeveralItems = (arr) => {
   let output = [];
 
   for (let i = 0; i < itemsQuantity; i++) {
-    let item = getRandomItem(arr);
-
-    while (output.includes(item)) {
-      item = getRandomItem(arr);
-    }
-
-    output.push(item);
+    output.push(getRandomItem(arr));
   }
 
   return output;
 };
 
-const getPhotos = (pattern, ext, quantity) => {
+const generatePhotos = (pattern, ext, quantity) => {
   let output = [];
   for (let i = 0; i < quantity; i++) {
-    let item = pattern + randomInteger(0, MOCK_MAX) + ext;
-    while (output.includes(item)) {
-      item = pattern + randomInteger(0, MOCK_MAX) + ext;
-    }
-    output.push(item);
+    output.push(pattern + randomInteger(0, MOCK_MAX) + ext);
   }
 
   return output;
@@ -63,7 +55,7 @@ const generateOffer = () => {
   let obj =
   {
     title: `заголовок`,
-    address: `600, 350`,
+    address: randomInteger(MIN_ADDRESS, MAX_ADDRESS),
     price: randomInteger(MIN_PRICE, MAX_PRICE),
     type: getRandomItem(PLACE_TYPES),
     rooms: randomInteger(MIN_ROOMS, MAX_ROOMS),
@@ -72,7 +64,7 @@ const generateOffer = () => {
     checkout: getRandomItem(CHECKOUT_OPTIONS),
     features: getSeveralItems(FEATURES_OPTIONS),
     description: `описание`,
-    photos: getPhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, MOCK_MAX)),
+    photos: generatePhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, MOCK_MAX)),
   };
 
   return obj;
