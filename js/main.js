@@ -9,8 +9,9 @@ const PHOTO_PATTERN = `http://o0.github.io/assets/images/tokyo/hotel`;
 const PHOTO_EXT = `.jpg`;
 const LOCATION_Y_MIN = 130;
 const LOCATION_Y_MAX = 630;
-const PIN_WIDTH = 50;
-const PIN_HEIGHT = 70;
+const PIN_WIDTH = 62;
+const PIN_HEIGHT = 62;
+const PIN_POINTER_HEIGHT = 22;
 const MIN_ADDRESS = 0;
 const MAX_ADDRESS = 1000;
 const MIN_PRICE = 0;
@@ -25,6 +26,33 @@ const adForm = document.querySelector(`.ad-form`);
 const adFormElements = adForm.querySelectorAll(`fieldset`);
 const filtersForm = document.querySelector(`.map__filters`);
 const pin = document.querySelector(`.map__pin--main`);
+const address = adForm.querySelector(`#address`);
+const rooms = adForm.querySelector(`#room_number`);
+const capacity = adForm.querySelector(`#capacity`);
+
+const activateForm = function () {
+  map.classList.remove(`map--faded`);
+
+  adForm.classList.remove(`ad-form--disabled`);
+
+  adFormElements.forEach(function (el) {
+    el.removeAttribute(`disabled`);
+  });
+
+  filtersForm.classList.remove(`map__filters--disabled`);
+
+  address.value = `${(parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed()} , ${(parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed()}`;
+};
+
+const checkRoomsValidity = function () {
+  if (capacity.value > rooms.value && rooms.value !== `100`) {
+    capacity.setCustomValidity(`Нельзя разместить столько гостей`);
+  } else if (rooms.value === `100` && capacity.value !== `0`) {
+    capacity.setCustomValidity(`Вашему помещению можно поставить только "Не для гостей"`);
+  } else {
+    capacity.setCustomValidity(``);
+  }
+};
 
 const randomInteger = (min, max) => {
   let rand = min + Math.random() * (max + 1 - min);
@@ -128,14 +156,27 @@ filtersForm.classList.add(`map__filters--disabled`);
 
 pin.addEventListener(`mousedown`, function (evt) {
   if (evt.button === 0) {
-    map.classList.remove(`map--faded`);
-
-    adForm.classList.remove(`ad-form--disabled`);
-
-    adFormElements.forEach(function (el) {
-      el.removeAttribute(`disabled`);
-    });
-
-    filtersForm.classList.remove(`map__filters--disabled`);
+    activateForm();
   }
 });
+
+
+pin.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    activateForm();
+  }
+});
+
+
+address.value = `${(parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed()} , ${(parseInt(pin.style.top, 10) + PIN_HEIGHT / 2).toFixed()}`;
+
+checkRoomsValidity();
+
+capacity.addEventListener(`change`, function () {
+  checkRoomsValidity();
+});
+
+rooms.addEventListener(`change`, function () {
+  checkRoomsValidity();
+});
+
