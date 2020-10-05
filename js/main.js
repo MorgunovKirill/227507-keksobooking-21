@@ -21,6 +21,10 @@ const MIN_ROOMS = 1;
 const MAX_ROOMS = 100;
 
 const map = document.querySelector(`.map`);
+const adForm = document.querySelector(`.ad-form`);
+const adFormElements = adForm.querySelectorAll(`fieldset`);
+const filtersForm = document.querySelector(`.map__filters`);
+const pin = document.querySelector(`.map__pin--main`);
 
 const randomInteger = (min, max) => {
   let rand = min + Math.random() * (max + 1 - min);
@@ -115,4 +119,23 @@ const places = document.querySelector(`.map__pins`);
 
 places.appendChild(fragment);
 
-map.classList.remove(`map--faded`);
+
+adFormElements.forEach(function (el) {
+  el.setAttribute(`disabled`, `disabled`);
+});
+
+filtersForm.classList.add(`map__filters--disabled`);
+
+pin.addEventListener(`mousedown`, function (evt) {
+  if (evt.button === 0) {
+    map.classList.remove(`map--faded`);
+
+    adForm.classList.remove(`ad-form--disabled`);
+
+    adFormElements.forEach(function (el) {
+      el.removeAttribute(`disabled`);
+    });
+
+    filtersForm.classList.remove(`map__filters--disabled`);
+  }
+});
