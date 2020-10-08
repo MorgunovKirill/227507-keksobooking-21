@@ -29,8 +29,13 @@ const pin = document.querySelector(`.map__pin--main`);
 const address = adForm.querySelector(`#address`);
 const rooms = adForm.querySelector(`#room_number`);
 const capacity = adForm.querySelector(`#capacity`);
+const places = document.querySelector(`.map__pins`);
 
-const activateForm = function () {
+const init = function () {
+  if (map.classList.contains(`map--faded`)) {
+    renderFragment(MOCK_MAX, places);
+  }
+
   map.classList.remove(`map--faded`);
 
   adForm.classList.remove(`ad-form--disabled`);
@@ -41,7 +46,14 @@ const activateForm = function () {
 
   filtersForm.classList.remove(`map__filters--disabled`);
 
-  address.value = `${(parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed()} , ${(parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed()}`;
+  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
+  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
+
+  address.value = setAddress(addressX, addressY);
+};
+
+const setAddress = (x, y) => {
+  return x + ` , ` + y;
 };
 
 const checkRoomsValidity = function () {
@@ -134,18 +146,30 @@ const placeTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 
-let fragment = document.createDocumentFragment();
+const renderFragment = (counter, place) => {
+  let fragment = document.createDocumentFragment();
 
-for (let i = 1; i <= MOCK_MAX; i++) {
-  let author = {
-    avatar: `img/avatars/user0${i}.png`
-  };
-  fragment.appendChild(renderPlace(generatePlace(author, generateOffer(), generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
-}
+  for (let i = 1; i <= counter; i++) {
+    let author = {
+      avatar: `img/avatars/user0${i}.png`
+    };
+    fragment.appendChild(renderPlace(generatePlace(author, generateOffer(), generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
+  }
 
-const places = document.querySelector(`.map__pins`);
+  place.appendChild(fragment);
+};
 
-places.appendChild(fragment);
+
+// for (let i = 1; i <= MOCK_MAX; i++) {
+//   let author = {
+//     avatar: `img/avatars/user0${i}.png`
+//   };
+//   fragment.appendChild(renderPlace(generatePlace(author, generateOffer(), generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
+// }
+
+// const places = document.querySelector(`.map__pins`);
+
+// places.appendChild(fragment);
 
 
 adFormElements.forEach(function (el) {
@@ -156,19 +180,16 @@ filtersForm.classList.add(`map__filters--disabled`);
 
 pin.addEventListener(`mousedown`, function (evt) {
   if (evt.button === 0) {
-    activateForm();
+    init();
   }
 });
 
 
 pin.addEventListener(`keydown`, function (evt) {
   if (evt.key === `Enter`) {
-    activateForm();
+    init();
   }
 });
-
-
-address.value = `${(parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed()} , ${(parseInt(pin.style.top, 10) + PIN_HEIGHT / 2).toFixed()}`;
 
 checkRoomsValidity();
 
