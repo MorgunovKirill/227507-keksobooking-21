@@ -25,11 +25,21 @@ const map = document.querySelector(`.map`);
 const adForm = document.querySelector(`.ad-form`);
 const adFormElements = adForm.querySelectorAll(`fieldset`);
 const filtersForm = document.querySelector(`.map__filters`);
+const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
+const filtersFormSelects = filtersForm.querySelectorAll(`select`);
+
 const pin = document.querySelector(`.map__pin--main`);
 const address = adForm.querySelector(`#address`);
 const rooms = adForm.querySelector(`#room_number`);
 const capacity = adForm.querySelector(`#capacity`);
 const places = document.querySelector(`.map__pins`);
+
+const getAddressCoords = (item) => {
+  return {
+    x: (parseInt(item.style.left, 10) + PIN_WIDTH / 2).toFixed(),
+    y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
+  };
+};
 
 const setAddress = (x, y) => {
   return x + ` , ` + y;
@@ -165,13 +175,12 @@ const renderFragment = (counter, place) => {
   place.appendChild(fragment);
 };
 
-
 const init = () => {
-  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
-  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
-  address.value = setAddress(addressX, addressY);
+  address.value = setAddress(getAddressCoords(pin)[`x`], getAddressCoords(pin)[`y`]);
   filtersForm.classList.add(`map__filters--disabled`);
   addAttributeDisabled(adFormElements);
+  addAttributeDisabled(filtersFormFields);
+  addAttributeDisabled(filtersFormSelects);
 };
 
 const activate = () => {
@@ -184,13 +193,12 @@ const activate = () => {
   adForm.classList.remove(`ad-form--disabled`);
 
   removeAttributeDisabled(adFormElements);
+  removeAttributeDisabled(filtersFormFields);
+  removeAttributeDisabled(filtersFormSelects);
 
   filtersForm.classList.remove(`map__filters--disabled`);
 
-  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
-  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
-
-  address.value = setAddress(addressX, addressY);
+  address.value = setAddress(getAddressCoords(pin)[`x`], getAddressCoords(pin)[`y`]);
 };
 
 
@@ -212,13 +220,15 @@ pin.addEventListener(`keydown`, function (evt) {
 });
 
 checkRoomsValidity();
+capacity.addEventListener(`change`, checkRoomsValidity);
+rooms.addEventListener(`change`, checkRoomsValidity);
 
-capacity.addEventListener(`change`, function () {
-  checkRoomsValidity();
-});
+// capacity.addEventListener(`change`, function () {
+//   checkRoomsValidity();
+// });
 
-rooms.addEventListener(`change`, function () {
-  checkRoomsValidity();
-});
+// rooms.addEventListener(`change`, function () {
+//   checkRoomsValidity();
+// });
 
 init();
