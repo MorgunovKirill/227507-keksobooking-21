@@ -31,6 +31,10 @@ const rooms = adForm.querySelector(`#room_number`);
 const capacity = adForm.querySelector(`#capacity`);
 const places = document.querySelector(`.map__pins`);
 
+const setAddress = (x, y) => {
+  return x + ` , ` + y;
+};
+
 const addAttributeDisabled = (arr) => {
   arr.forEach(function (el) {
     el.setAttribute(`disabled`, true);
@@ -43,48 +47,33 @@ const removeAttributeDisabled = (arr) => {
   });
 };
 
-const init = () => {
-  adFormElements.forEach(function (el) {
-    el.setAttribute(`disabled`, `disabled`);
-  });
-
-  filtersForm.classList.add(`map__filters--disabled`);
-  addAttributeDisabled(adFormElements);
-};
-
-const activate = () => {
-  if (map.classList.contains(`map--faded`)) {
-    renderFragment(MOCK_MAX, places);
-  }
-
-  map.classList.remove(`map--faded`);
-
-  adForm.classList.remove(`ad-form--disabled`);
-
-  removeAttributeDisabled(adFormElements);
-
-  filtersForm.classList.remove(`map__filters--disabled`);
-
-  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
-  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
-
-  address.value = setAddress(addressX, addressY);
-};
-
-const setAddress = (x, y) => {
-  return x + ` , ` + y;
-};
-
 const checkRoomsValidity = () => {
   if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
-    capacity.setCustomValidity(`Вашему помещению можно поставить только "Не для гостей"`);
-  } else if (rooms.value !== `${MAX_ROOMS}` && capacity.value === `0`) {
-    capacity.setCustomValidity(`"Не для гостей" нельзя поставить для Вашего помещения`);
-  } else if (rooms.value < capacity.value) {
-    capacity.setCustomValidity(`Нельзя разместить столько гостей`);
+    capacity.setCustomValidity(`Не для гостей`);
+  } else if (rooms.value === `1` && capacity.value !== `1`) {
+    capacity.setCustomValidity(`для 1 гостя`);
+  } else if (rooms.value === `2`) {
+    capacity.setCustomValidity(`для 2 гостей или для 1 гостя`);
+    if (capacity.value === `1` || capacity.value === `2`) {
+      capacity.setCustomValidity(``);
+    }
+  } else if (rooms.value === `3`) {
+    capacity.setCustomValidity(`для 3 гостей, для 2 гостей или для 1 гостя`);
+    if (capacity.value === `1` || capacity.value === `2` || capacity.value === `3`) {
+      capacity.setCustomValidity(``);
+    }
   } else {
     capacity.setCustomValidity(``);
   }
+  // if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
+  //   capacity.setCustomValidity(`"Не для гостей"`);
+  // } else if (rooms.value !== `${MAX_ROOMS}` && capacity.value === `0`) {
+  //   capacity.setCustomValidity(`"Не для гостей" нельзя поставить для Вашего помещения`);
+  // } else if (rooms.value < capacity.value) {
+  //   capacity.setCustomValidity(`Нельзя разместить столько гостей`);
+  // } else {
+  //   capacity.setCustomValidity(``);
+  // }
 };
 
 const randomInteger = (min, max) => {
@@ -163,10 +152,6 @@ const renderPlace = (place) => {
   return placeElement;
 };
 
-const placeTemplate = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
-
 const renderFragment = (counter, place) => {
   let fragment = document.createDocumentFragment();
 
@@ -179,6 +164,39 @@ const renderFragment = (counter, place) => {
 
   place.appendChild(fragment);
 };
+
+
+const init = () => {
+  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
+  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
+  address.value = setAddress(addressX, addressY);
+  filtersForm.classList.add(`map__filters--disabled`);
+  addAttributeDisabled(adFormElements);
+};
+
+const activate = () => {
+  if (map.classList.contains(`map--faded`)) {
+    renderFragment(MOCK_MAX, places);
+  }
+
+  map.classList.remove(`map--faded`);
+
+  adForm.classList.remove(`ad-form--disabled`);
+
+  removeAttributeDisabled(adFormElements);
+
+  filtersForm.classList.remove(`map__filters--disabled`);
+
+  let addressX = (parseInt(pin.style.left, 10) + PIN_WIDTH / 2).toFixed();
+  let addressY = (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed();
+
+  address.value = setAddress(addressX, addressY);
+};
+
+
+const placeTemplate = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
 
 
 pin.addEventListener(`mousedown`, function (evt) {
