@@ -9,8 +9,9 @@ const PHOTO_PATTERN = `http://o0.github.io/assets/images/tokyo/hotel`;
 const PHOTO_EXT = `.jpg`;
 const LOCATION_Y_MIN = 130;
 const LOCATION_Y_MAX = 630;
-const PIN_WIDTH = 50;
-const PIN_HEIGHT = 70;
+const PIN_WIDTH = 62;
+const PIN_HEIGHT = 62;
+const PIN_POINTER_HEIGHT = 22;
 const MIN_ADDRESS = 0;
 const MAX_ADDRESS = 1000;
 const MIN_PRICE = 0;
@@ -21,6 +22,69 @@ const MIN_ROOMS = 1;
 const MAX_ROOMS = 100;
 
 const map = document.querySelector(`.map`);
+const adForm = document.querySelector(`.ad-form`);
+const adFormElements = adForm.querySelectorAll(`fieldset`);
+const filtersForm = document.querySelector(`.map__filters`);
+const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
+const filtersFormSelects = filtersForm.querySelectorAll(`select`);
+
+const pin = document.querySelector(`.map__pin--main`);
+const address = adForm.querySelector(`#address`);
+const rooms = adForm.querySelector(`#room_number`);
+const capacity = adForm.querySelector(`#capacity`);
+const places = document.querySelector(`.map__pins`);
+
+const getAddressCoords = (item) => {
+  return {
+    x: (parseInt(item.style.left, 10) + PIN_WIDTH / 2).toFixed(),
+    y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
+  };
+};
+
+const setAddress = (x, y) => {
+  return x + ` , ` + y;
+};
+
+const addAttributeDisabled = (arr) => {
+  arr.forEach(function (el) {
+    el.setAttribute(`disabled`, true);
+  });
+};
+
+const removeAttributeDisabled = (arr) => {
+  arr.forEach(function (el) {
+    el.removeAttribute(`disabled`);
+  });
+};
+
+const checkRoomsValidity = () => {
+  if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
+    capacity.setCustomValidity(`Не для гостей`);
+  } else if (rooms.value === `1` && capacity.value !== `1`) {
+    capacity.setCustomValidity(`для 1 гостя`);
+  } else if (rooms.value === `2`) {
+    capacity.setCustomValidity(`для 2 гостей или для 1 гостя`);
+    if (capacity.value === `1` || capacity.value === `2`) {
+      capacity.setCustomValidity(``);
+    }
+  } else if (rooms.value === `3`) {
+    capacity.setCustomValidity(`для 3 гостей, для 2 гостей или для 1 гостя`);
+    if (capacity.value === `1` || capacity.value === `2` || capacity.value === `3`) {
+      capacity.setCustomValidity(``);
+    }
+  } else {
+    capacity.setCustomValidity(``);
+  }
+  // if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
+  //   capacity.setCustomValidity(`"Не для гостей"`);
+  // } else if (rooms.value !== `${MAX_ROOMS}` && capacity.value === `0`) {
+  //   capacity.setCustomValidity(`"Не для гостей" нельзя поставить для Вашего помещения`);
+  // } else if (rooms.value < capacity.value) {
+  //   capacity.setCustomValidity(`Нельзя разместить столько гостей`);
+  // } else {
+  //   capacity.setCustomValidity(``);
+  // }
+};
 
 const randomInteger = (min, max) => {
   let rand = min + Math.random() * (max + 1 - min);
@@ -86,7 +150,7 @@ const generatePlace = (author, offer, location) => {
   };
 };
 
-const renderPlace = function (place) {
+const renderPlace = (place) => {
   let placeElement = placeTemplate.cloneNode(true);
   let placeImg = placeElement.querySelector(`img`);
 
@@ -98,21 +162,73 @@ const renderPlace = function (place) {
   return placeElement;
 };
 
+const renderFragment = (counter, place) => {
+  let fragment = document.createDocumentFragment();
+
+  for (let i = 1; i <= counter; i++) {
+    let author = {
+      avatar: `img/avatars/user0${i}.png`
+    };
+    fragment.appendChild(renderPlace(generatePlace(author, generateOffer(), generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
+  }
+
+  place.appendChild(fragment);
+};
+
+const init = () => {
+  address.value = setAddress(getAddressCoords(pin)[`x`], getAddressCoords(pin)[`y`]);
+  filtersForm.classList.add(`map__filters--disabled`);
+  addAttributeDisabled(adFormElements);
+  addAttributeDisabled(filtersFormFields);
+  addAttributeDisabled(filtersFormSelects);
+};
+
+const activate = () => {
+  if (map.classList.contains(`map--faded`)) {
+    renderFragment(MOCK_MAX, places);
+  }
+
+  map.classList.remove(`map--faded`);
+
+  adForm.classList.remove(`ad-form--disabled`);
+
+  removeAttributeDisabled(adFormElements);
+  removeAttributeDisabled(filtersFormFields);
+  removeAttributeDisabled(filtersFormSelects);
+
+  filtersForm.classList.remove(`map__filters--disabled`);
+
+  address.value = setAddress(getAddressCoords(pin)[`x`], getAddressCoords(pin)[`y`]);
+};
+
+
 const placeTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 
-let fragment = document.createDocumentFragment();
 
-for (let i = 1; i <= MOCK_MAX; i++) {
-  let author = {
-    avatar: `img/avatars/user0${i}.png`
-  };
-  fragment.appendChild(renderPlace(generatePlace(author, generateOffer(), generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
-}
+pin.addEventListener(`mousedown`, function (evt) {
+  if (evt.button === 0) {
+    activate();
+  }
+});
 
-const places = document.querySelector(`.map__pins`);
+pin.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    activate();
+  }
+});
 
-places.appendChild(fragment);
+checkRoomsValidity();
+capacity.addEventListener(`change`, checkRoomsValidity);
+rooms.addEventListener(`change`, checkRoomsValidity);
 
-map.classList.remove(`map--faded`);
+// capacity.addEventListener(`change`, function () {
+//   checkRoomsValidity();
+// });
+
+// rooms.addEventListener(`change`, function () {
+//   checkRoomsValidity();
+// });
+
+init();
