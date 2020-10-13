@@ -1,51 +1,56 @@
 'use strict';
 (function () {
+  const adForm = document.querySelector(`.ad-form`);
+  const adFormElements = adForm.querySelectorAll(`fieldset`);
+  const filtersForm = document.querySelector(`.map__filters`);
+  const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
+  const filtersFormSelects = filtersForm.querySelectorAll(`select`);
+  const address = adForm.querySelector(`#address`);
+  const rooms = adForm.querySelector(`#room_number`);
+  const capacity = adForm.querySelector(`#capacity`);
+
+  const map = document.querySelector(`.map`);
+  const pin = document.querySelector(`.map__pin--main`);
+  const places = document.querySelector(`.map__pins`);
+
   const init = () => {
-    window.form.address.value = window.map.setAddress(window.map.getAddressCoords(window.map.pin)[`x`], window.map.getAddressCoords(window.map.pin)[`y`]);
-    window.form.filtersForm.classList.add(`map__filters--disabled`);
-    window.form.addAttributeDisabled(window.form.adFormElements);
-    window.form.addAttributeDisabled(window.form.filtersFormFields);
-    window.form.addAttributeDisabled(window.form.filtersFormSelects);
+    address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
+    filtersForm.classList.add(`map__filters--disabled`);
+    window.form.addAttributeDisabled(adFormElements);
+    window.form.addAttributeDisabled(filtersFormFields);
+    window.form.addAttributeDisabled(filtersFormSelects);
   };
 
   const activate = () => {
-    if (window.map.map.classList.contains(`map--faded`)) {
-      window.map.renderFragment(window.util.mockmax, window.map.places);
+    if (map.classList.contains(`map--faded`)) {
+      window.map.renderFragment(window.data.MOCK_MAX, places);
     }
 
-    window.map.map.classList.remove(`map--faded`);
+    map.classList.remove(`map--faded`);
 
-    window.form.form.classList.remove(`ad-form--disabled`);
+    adForm.classList.remove(`ad-form--disabled`);
 
-    window.form.removeAttributeDisabled(window.form.adFormElements);
-    window.form.removeAttributeDisabled(window.form.filtersFormFields);
-    window.form.removeAttributeDisabled(window.form.filtersFormSelects);
+    window.form.removeAttributeDisabled(adFormElements);
+    window.form.removeAttributeDisabled(filtersFormFields);
+    window.form.removeAttributeDisabled(filtersFormSelects);
 
-    window.form.filtersForm.classList.remove(`map__filters--disabled`);
+    filtersForm.classList.remove(`map__filters--disabled`);
 
-    window.form.address.value = window.map.setAddress(window.map.getAddressCoords(window.map.pin)[`x`], window.map.getAddressCoords(window.map.pin)[`y`]);
+    address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
   };
 
 
   window.form.checkRoomsValidity();
-  window.form.capacity.addEventListener(`change`, window.form.checkRoomsValidity);
-  window.form.rooms.addEventListener(`change`, window.form.checkRoomsValidity);
+  capacity.addEventListener(`change`, window.form.checkRoomsValidity);
+  rooms.addEventListener(`change`, window.form.checkRoomsValidity);
 
-  // capacity.addEventListener(`change`, function () {
-  //   checkRoomsValidity();
-  // });
-
-  // rooms.addEventListener(`change`, function () {
-  //   checkRoomsValidity();
-  // });
-
-  window.map.pin.addEventListener(`mousedown`, function (evt) {
+  pin.addEventListener(`mousedown`, function (evt) {
     if (evt.button === 0) {
       activate();
     }
   });
 
-  window.map.pin.addEventListener(`keydown`, function (evt) {
+  pin.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
       activate();
     }

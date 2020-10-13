@@ -9,7 +9,6 @@
 
   const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
-  const places = document.querySelector(`.map__pins`);
 
   const placeTemplate = document.querySelector(`#pin`)
     .content
@@ -27,31 +26,32 @@
     return placeElement;
   };
 
-  window.map = {
-    getAddressCoords: (item) => {
-      return {
-        x: (parseInt(item.style.left, 10) + PIN_WIDTH / 2).toFixed(),
-        y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
+  const getAddressCoords = (item) => {
+    return {
+      x: (parseInt(item.style.left, 10) + PIN_WIDTH / 2).toFixed(),
+      y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
+    };
+  };
+  const setAddress = (x, y) => {
+    return x + ` , ` + y;
+  };
+  const renderFragment = (counter, place) => {
+    let fragment = document.createDocumentFragment();
+
+    for (let i = 1; i <= counter; i++) {
+      let author = {
+        avatar: `img/avatars/user0${i}.png`
       };
-    },
-    setAddress: (x, y) => {
-      return x + ` , ` + y;
-    },
-    renderFragment: (counter, place) => {
-      let fragment = document.createDocumentFragment();
+      fragment.appendChild(renderPlace(window.data.generatePlace(author, window.data.generateOffer(), window.data.generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
+    }
 
-      for (let i = 1; i <= counter; i++) {
-        let author = {
-          avatar: `img/avatars/user0${i}.png`
-        };
-        fragment.appendChild(renderPlace(window.util.generatePlace(author, window.util.generateOffer(), window.util.generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
-      }
+    place.appendChild(fragment);
+  };
 
-      place.appendChild(fragment);
-    },
-    map,
-    pin,
-    places
+  window.map = {
+    getAddressCoords,
+    setAddress,
+    renderFragment,
   };
 
 })();

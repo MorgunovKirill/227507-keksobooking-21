@@ -46,41 +46,45 @@
     return output;
   };
 
-  window.util = {
-    generateOffer: () => {
-      let obj =
-      {
-        title: `заголовок`,
-        address: randomInteger(MIN_ADDRESS, MAX_ADDRESS),
-        price: randomInteger(MIN_PRICE, MAX_PRICE),
-        type: getRandomItem(PLACE_TYPES),
-        rooms: randomInteger(MIN_ROOMS, MAX_ROOMS),
-        guests: randomInteger(MIN_GUESTS, MAX_GUESTS),
-        checkin: getRandomItem(CHECKIN_OPTIONS),
-        checkout: getRandomItem(CHECKOUT_OPTIONS),
-        features: getSeveralItems(FEATURES_OPTIONS),
-        description: `описание`,
-        photos: generatePhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, MOCK_MAX)),
-      };
+  const generateOffer = () => {
+    let obj =
+    {
+      title: `заголовок`,
+      address: randomInteger(MIN_ADDRESS, MAX_ADDRESS),
+      price: randomInteger(MIN_PRICE, MAX_PRICE),
+      type: getRandomItem(PLACE_TYPES),
+      rooms: randomInteger(MIN_ROOMS, MAX_ROOMS),
+      guests: randomInteger(MIN_GUESTS, MAX_GUESTS),
+      checkin: getRandomItem(CHECKIN_OPTIONS),
+      checkout: getRandomItem(CHECKOUT_OPTIONS),
+      features: getSeveralItems(FEATURES_OPTIONS),
+      description: `описание`,
+      photos: generatePhotos(PHOTO_PATTERN, PHOTO_EXT, randomInteger(1, MOCK_MAX)),
+    };
 
-      return obj;
-    },
+    return obj;
+  };
 
-    generateLocation: (xMax, yMin, yMax) => {
-      return {
-        x: randomInteger(0, xMax),
-        y: randomInteger(yMin, yMax),
-      };
-    },
+  const generateLocation = (xMax, yMin, yMax) => {
+    return {
+      x: randomInteger(0, xMax),
+      y: randomInteger(yMin, yMax),
+    };
+  };
 
-    generatePlace: (author, offer, location) => {
-      return {
-        author,
-        offer,
-        location
-      };
-    },
-    maxrooms: MAX_ROOMS,
-    mockmax: MOCK_MAX,
+  const generatePlace = (author, offer, location) => {
+    return {
+      author,
+      offer,
+      location
+    };
+  };
+
+  window.data = {
+    generateOffer,
+    generateLocation,
+    generatePlace,
+    MAX_ROOMS,
+    MOCK_MAX,
   };
 })();
