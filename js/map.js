@@ -1,14 +1,12 @@
 'use strict';
 
 (function () {
-  const LOCATION_Y_MIN = 130;
-  const LOCATION_Y_MAX = 630;
   const PIN_WIDTH = 62;
   const PIN_HEIGHT = 62;
   const PIN_POINTER_HEIGHT = 22;
 
-  const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
+  const places = document.querySelector(`.map__pins`);
 
   const placeTemplate = document.querySelector(`#pin`)
     .content
@@ -35,17 +33,15 @@
   const setAddress = (x, y) => {
     return x + ` , ` + y;
   };
-  const renderFragment = (counter, place) => {
-    let fragment = document.createDocumentFragment();
 
-    for (let i = 1; i <= counter; i++) {
-      let author = {
-        avatar: `img/avatars/user0${i}.png`
-      };
-      fragment.appendChild(renderPlace(window.data.generatePlace(author, window.data.generateOffer(), window.data.generateLocation(map.offsetWidth, LOCATION_Y_MIN, LOCATION_Y_MAX))));
+  const renderFragment = (arr) => {
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 1; i < arr.length; i++) {
+      fragment.appendChild(renderPlace(arr[i]));
     }
 
-    place.appendChild(fragment);
+    places.appendChild(fragment);
   };
 
   window.map = {

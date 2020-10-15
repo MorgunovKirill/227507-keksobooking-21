@@ -4,6 +4,7 @@
   const adForm = document.querySelector(`.ad-form`);
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
+  const MAX_ROOMS = 100;
 
   const addAttributeDisabled = (arr) => {
     arr.forEach(function (el) {
@@ -18,7 +19,7 @@
   };
 
   const checkRoomsValidity = () => {
-    if (rooms.value === `${window.data.MAX_ROOMS}` && capacity.value !== `0`) {
+    if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
       capacity.setCustomValidity(`Не для гостей`);
     } else if (rooms.value === `1` && capacity.value !== `1`) {
       capacity.setCustomValidity(`для 1 гостя`);
