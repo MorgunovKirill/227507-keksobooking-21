@@ -22,17 +22,19 @@
       onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 
-    xhr.timeout = TIMEOUT_IN_MS;
   };
 
-
-  window.load = function (onLoad, onError) {
+  const load = function (onLoad, onError) {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
+    xhr.open(`GET`, URL);
+    xhr.timeout = TIMEOUT_IN_MS;
 
     statusHandler(xhr, onLoad, onError);
-
-    xhr.open(`GET`, URL);
     xhr.send();
+  };
+
+  window.backend = {
+    load,
   };
 })();

@@ -12,14 +12,9 @@
   const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
 
-
   const errorHandler = function (errorMessage) {
     const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
+    node.classList.add(`server-error`);
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
@@ -36,7 +31,7 @@
 
   const activate = () => {
     if (map.classList.contains(`map--faded`)) {
-      window.load(window.map.renderFragment, errorHandler);
+      window.backend.load(window.map.renderFragment, errorHandler);
     }
 
     map.classList.remove(`map--faded`);
