@@ -1246,3 +1246,14 @@ fieldset {
 .hidden {
   display: none;
 }
+
+.server-error {
+  z-index: 100;
+  margin: 0 auto;
+  text-align: center;
+  background-color: red;
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-size: 30px;
+}

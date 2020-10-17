@@ -11,7 +11,15 @@
 
   const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
-  const places = document.querySelector(`.map__pins`);
+
+  const errorHandler = function (errorMessage) {
+    const node = document.createElement(`div`);
+    node.classList.add(`server-error`);
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
 
   const init = () => {
     address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
@@ -23,7 +31,7 @@
 
   const activate = () => {
     if (map.classList.contains(`map--faded`)) {
-      window.map.renderFragment(window.data.MOCK_MAX, places);
+      window.backend.load(window.map.renderFragment, errorHandler);
     }
 
     map.classList.remove(`map--faded`);
