@@ -6,6 +6,15 @@
   };
   const TIMEOUT_IN_MS = 10000;
 
+  const errorHandler = function (errorMessage) {
+    const node = document.createElement(`div`);
+    node.classList.add(`server-error`);
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+
   const statusHandler = (xhr, onLoad, onError) => {
     xhr.addEventListener(`load`, function () {
       if (xhr.status === StatusCode.OK) {
@@ -24,7 +33,7 @@
 
   };
 
-  const load = function (onLoad, onError) {
+  const load = (onLoad, onError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
     xhr.open(`GET`, URL);
@@ -34,7 +43,22 @@
     xhr.send();
   };
 
+  const upload = (data, onSuccess) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = `json`;
+    xhr.open(`POST`, URL);
+    xhr.timeout = TIMEOUT_IN_MS;
+
+    xhr.addEventListener(`load`, function () {
+      onSuccess(xhr.response);
+    });
+
+    xhr.send(data);
+  };
+
   window.backend = {
     load,
+    upload,
+    errorHandler
   };
 })();

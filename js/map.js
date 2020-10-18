@@ -4,6 +4,7 @@
   const PIN_WIDTH = 62;
   const PIN_HEIGHT = 62;
   const PIN_POINTER_HEIGHT = 22;
+  const MAX_PINS_TO_SHOW = 5;
 
   const pin = document.querySelector(`.map__pin--main`);
   const places = document.querySelector(`.map__pins`);
@@ -34,10 +35,23 @@
     return x + ` , ` + y;
   };
 
-  const renderFragment = (arr) => {
+  const renderFragment = (arr, filterCallback) => {
+
+    if (filterCallback) {
+      arr = window.filter.housingFilter(arr);
+    }
+
+    places.querySelectorAll(`.map__pin`).forEach(function (element) {
+      if (!(element.classList.contains(`map__pin--main`))) {
+        places.removeChild(element);
+      }
+    });
+
     const fragment = document.createDocumentFragment();
 
-    for (let i = 1; i < arr.length; i++) {
+    const takeNumber = arr.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : arr.length;
+
+    for (let i = 0; i < takeNumber; i++) {
       fragment.appendChild(renderPlace(arr[i]));
     }
 
