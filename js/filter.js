@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const housingType = document.getElementById(`housing-type`);
+  const housingType = document.querySelector(`#housing-type`);
 
   const filterHousing = (arr) => {
     if (housingType.value === `any`) {
