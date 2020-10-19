@@ -8,18 +8,15 @@
   const address = adForm.querySelector(`#address`);
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
+  const housingType = document.getElementById(`housing-type`);
 
   const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
+  let offers = [];
 
-  const errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.classList.add(`server-error`);
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
+  const successHandler = (data) => {
+    offers = [...data];
   };
-
 
   const init = () => {
     address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
@@ -30,8 +27,9 @@
   };
 
   const activate = () => {
+
     if (map.classList.contains(`map--faded`)) {
-      window.backend.load(window.map.renderFragment, errorHandler);
+      window.map.renderFragment(offers);
     }
 
     map.classList.remove(`map--faded`);
@@ -46,7 +44,6 @@
 
     address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
   };
-
 
   window.form.checkRoomsValidity();
   capacity.addEventListener(`change`, window.form.checkRoomsValidity);
@@ -64,5 +61,10 @@
     }
   });
 
+  housingType.addEventListener(`change`, () => {
+    window.map.renderFragment(offers, window.filter.filterHousing);
+  });
+
   init();
+  window.backend.load(successHandler, window.backend.errorHandler);
 })();

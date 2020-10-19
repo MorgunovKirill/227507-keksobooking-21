@@ -4,6 +4,7 @@
   const PIN_WIDTH = 62;
   const PIN_HEIGHT = 62;
   const PIN_POINTER_HEIGHT = 22;
+  const MAX_PINS_TO_SHOW = 5;
 
   const pin = document.querySelector(`.map__pin--main`);
   const places = document.querySelector(`.map__pins`);
@@ -11,6 +12,12 @@
   const placeTemplate = document.querySelector(`#pin`)
     .content
     .querySelector(`.map__pin`);
+
+  const clearPins = (container) => {
+    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
+      container.removeChild(element);
+    });
+  };
 
   const renderPlace = (place) => {
     let placeElement = placeTemplate.cloneNode(true);
@@ -34,11 +41,22 @@
     return x + ` , ` + y;
   };
 
-  const renderFragment = (arr) => {
+  const renderFragment = (arr, filterCallback) => {
+
+    let data = [...arr];
+
+    if (filterCallback) {
+      data = window.filter.filterHousing(data);
+    }
+
+    clearPins(places);
+
     const fragment = document.createDocumentFragment();
 
-    for (let i = 1; i < arr.length; i++) {
-      fragment.appendChild(renderPlace(arr[i]));
+    const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
+
+    for (let i = 0; i < takeNumber; i++) {
+      fragment.appendChild(renderPlace(data[i]));
     }
 
     places.appendChild(fragment);
