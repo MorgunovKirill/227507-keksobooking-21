@@ -13,6 +13,12 @@
     .content
     .querySelector(`.map__pin`);
 
+  const clearPins = (container) => {
+    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
+      container.removeChild(element);
+    });
+  };
+
   const renderPlace = (place) => {
     let placeElement = placeTemplate.cloneNode(true);
     let placeImg = placeElement.querySelector(`img`);
@@ -37,22 +43,20 @@
 
   const renderFragment = (arr, filterCallback) => {
 
+    let data = [...arr];
+
     if (filterCallback) {
-      arr = window.filter.housingFilter(arr);
+      data = window.filter.filterHousing(data);
     }
 
-    places.querySelectorAll(`.map__pin`).forEach(function (element) {
-      if (!(element.classList.contains(`map__pin--main`))) {
-        places.removeChild(element);
-      }
-    });
+    clearPins(places);
 
     const fragment = document.createDocumentFragment();
 
-    const takeNumber = arr.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : arr.length;
+    const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
-      fragment.appendChild(renderPlace(arr[i]));
+      fragment.appendChild(renderPlace(data[i]));
     }
 
     places.appendChild(fragment);

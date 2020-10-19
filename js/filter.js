@@ -3,7 +3,7 @@
 (function () {
   const housingType = document.getElementById(`housing-type`);
 
-  const housingFilter = (arr) => {
+  const filterHousing = (arr) => {
     if (housingType.value === `any`) {
       return arr;
     }
@@ -15,6 +15,6 @@
   };
 
   window.filter = {
-    housingFilter,
+    filterHousing,
   };
 })();

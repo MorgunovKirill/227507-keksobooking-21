@@ -15,7 +15,7 @@
   let offers = [];
 
   const successHandler = (data) => {
-    offers = data;
+    offers = [...data];
   };
 
   const init = () => {
@@ -62,7 +62,7 @@
   });
 
   housingType.addEventListener(`change`, () => {
-    window.map.renderFragment(offers, window.filter.housingFilter);
+    window.map.renderFragment(offers, window.filter.filterHousing);
   });
 
   init();
