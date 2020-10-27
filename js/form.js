@@ -5,6 +5,10 @@
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
   const title = adForm.querySelector(`#title`);
+  const type = adForm.querySelector(`#type`);
+  const price = adForm.querySelector(`#price`);
+  const timeIn = adForm.querySelector(`#timein`);
+  const timeOut = adForm.querySelector(`#timeout`);
   const MAX_ROOMS = 100;
 
   const addAttributeDisabled = (arr) => {
@@ -26,6 +30,53 @@
       title.setCustomValidity(`максимальная длина - 100 символов`);
     } else {
       title.setCustomValidity(``);
+    }
+  };
+
+  const checkType = () => {
+    if (type.value === `bungalow`) {
+      price.setAttribute(`placeholder`, `0`);
+    }
+
+    if (type.value === `palace` && price.value < 10000) {
+      price.setAttribute(`placeholder`, `10000`);
+      price.setCustomValidity(`Минимальная цена за ночь: 10 000`);
+    } else if (type.value === `house` && price.value < 5000) {
+      price.setAttribute(`placeholder`, `5000`);
+      price.setCustomValidity(`Минимальная цена за ночь: 5 000`);
+    } else if (type.value === `flat` && price.value < 1000) {
+      price.setAttribute(`placeholder`, `1000`);
+      price.setCustomValidity(`Минимальная цена за ночь: 1 000`);
+    } else if (price.value.length === 0) {
+      price.setCustomValidity(`Нужно задать цену за ночь`);
+    } else {
+      price.setCustomValidity(``);
+    }
+  };
+
+  const checkPrice = () => {
+    if (price.value > 1000000) {
+      price.setCustomValidity(`Максимальная цена за ночь: 1 000 000`);
+    }
+  };
+
+  const checkTimeIn = () => {
+    if (timeIn.value === `12:00`) {
+      timeOut.value = `12:00`;
+    } else if (timeIn.value === `13:00`) {
+      timeOut.value = `13:00`;
+    } else if (timeIn.value === `14:00`) {
+      timeOut.value = `14:00`;
+    }
+  };
+
+  const checkTimeOut = () => {
+    if (timeOut.value === `12:00`) {
+      timeIn.value = `12:00`;
+    } else if (timeOut.value === `13:00`) {
+      timeIn.value = `13:00`;
+    } else if (timeOut.value === `14:00`) {
+      timeIn.value = `14:00`;
     }
   };
 
@@ -53,7 +104,11 @@
     addAttributeDisabled,
     removeAttributeDisabled,
     checkRoomsValidity,
-    checkTitle
+    checkTitle,
+    checkType,
+    checkPrice,
+    checkTimeIn,
+    checkTimeOut
   };
 
 })();
