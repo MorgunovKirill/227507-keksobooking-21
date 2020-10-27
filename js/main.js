@@ -8,6 +8,7 @@
   const address = adForm.querySelector(`#address`);
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
+  const title = adForm.querySelector(`#title`);
   const housingType = document.getElementById(`housing-type`);
 
   const map = document.querySelector(`.map`);
@@ -44,6 +45,9 @@
 
     address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
   };
+
+  window.form.checkTitle();
+  title.addEventListener(`input`, window.form.checkTitle);
 
   window.form.checkRoomsValidity();
   capacity.addEventListener(`change`, window.form.checkRoomsValidity);

@@ -4,6 +4,7 @@
   const adForm = document.querySelector(`.ad-form`);
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
+  const title = adForm.querySelector(`#title`);
   const MAX_ROOMS = 100;
 
   const addAttributeDisabled = (arr) => {
@@ -16,6 +17,16 @@
     arr.forEach(function (el) {
       el.removeAttribute(`disabled`);
     });
+  };
+
+  const checkTitle = () => {
+    if (title.value.length < 30) {
+      title.setCustomValidity(`минимальная длина - 30 символов`);
+    } else if (title.value.length > 100) {
+      title.setCustomValidity(`максимальная длина - 100 символов`);
+    } else {
+      title.setCustomValidity(``);
+    }
   };
 
   const checkRoomsValidity = () => {
@@ -38,11 +49,11 @@
     }
   };
 
-
   window.form = {
     addAttributeDisabled,
     removeAttributeDisabled,
     checkRoomsValidity,
+    checkTitle
   };
 
 })();
