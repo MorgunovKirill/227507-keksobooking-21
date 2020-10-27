@@ -25,7 +25,6 @@
   .content
   .querySelector(`.map__card`);
 
-
   const clearPins = (container) => {
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
       container.removeChild(element);
@@ -45,7 +44,8 @@
   };
 
   const checkData = (data, element) => {
-    if (!data.length) {
+
+    if (!data) {
       element.remove();
       return false;
     }
@@ -57,6 +57,7 @@
     const cardPhotos = card.querySelector(`.popup__photos`);
     const cardFeatures = card.querySelector(`.popup__features`);
     const photoTemplate = cardPhotos.querySelector(`.popup__photo`);
+
     const features = obj.offer.features;
     const photos = obj.offer.photos;
 
@@ -146,6 +147,8 @@
   const renderFragment = (arr, filterCallback) => {
 
     let data = [...arr];
+    let newPin;
+    let newCard;
 
     if (filterCallback) {
       data = window.filter.filterHousing(data);
@@ -158,14 +161,19 @@
     const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
-      pinFragment.appendChild(createPlace(data[i]));
+      newPin = createPlace(data[i]);
+      newPin.addEventListener(`click`, () => {
+        let cards = pinPlaces.querySelectorAll(`.map__card`);
+        cards.forEach((el) => {
+          el.remove();
+        });
+        newCard = createCard(data[i]);
+        pinPlaces.appendChild(newCard);
+      });
+      pinFragment.appendChild(newPin);
     }
 
     pinPlaces.appendChild(pinFragment);
-
-    let card = createCard(data[0]);
-
-    pinPlaces.appendChild(card);
   };
 
   window.map = {
