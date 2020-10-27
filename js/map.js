@@ -12,11 +12,9 @@
     palace: `Дворец`
   };
 
-
+  let popup;
   const pin = document.querySelector(`.map__pin--main`);
   const pinPlaces = document.querySelector(`.map__pins`);
-
-
   const placeTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
@@ -24,6 +22,27 @@
   const cardTemplate = document.querySelector(`#card`)
   .content
   .querySelector(`.map__card`);
+
+  const onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+
+  const openPopup = function () {
+    if (popup) {
+      popup.classList.remove(`hidden`);
+      popup.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
+    }
+    document.addEventListener(`keydown`, onPopupEscPress);
+  };
+
+
+  const closePopup = function () {
+    popup.classList.add(`hidden`);
+
+    document.removeEventListener(`keydown`, onPopupEscPress);
+    popup.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+  };
 
   const clearPins = (container) => {
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
@@ -169,6 +188,8 @@
         });
         newCard = createCard(data[i]);
         pinPlaces.appendChild(newCard);
+        popup = document.querySelector(`.popup`);
+        openPopup();
       });
       pinFragment.appendChild(newPin);
     }
