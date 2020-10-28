@@ -58,7 +58,6 @@
   window.form.checkType();
   type.addEventListener(`change`, window.form.checkType);
   price.addEventListener(`input`, window.form.checkType);
-  price.addEventListener(`input`, window.form.checkPrice);
 
   window.form.checkRoomsValidity();
   capacity.addEventListener(`change`, window.form.checkRoomsValidity);
@@ -84,7 +83,7 @@
   });
 
   housingType.addEventListener(`change`, () => {
-    window.map.renderFragment(offers, window.filter.filterHousing);
+    window.map.filterFragments(offers, window.filter.filterHousing);
   });
 
   init();

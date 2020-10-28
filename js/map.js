@@ -50,10 +50,17 @@
     });
   };
 
-  const createPlace = (place) => {
+  const hidePins = (pins) => {
+    pins.forEach(function (element) {
+      element.classList.add(`hidden`);
+    });
+  };
+
+  const createPlace = (place, index) => {
     let placeElement = placeTemplate.cloneNode(true);
     let placeImg = placeElement.querySelector(`img`);
 
+    placeElement.setAttribute(`data-id`, index);
     placeElement.style.left = `${place.location.x - (PIN_WIDTH / 2)}px`;
     placeElement.style.top = `${place.location.y - PIN_HEIGHT}px`;
     placeImg.setAttribute(`src`, place.author.avatar);
@@ -72,7 +79,12 @@
   };
 
   const createCard = (obj) => {
-    const card = cardTemplate.cloneNode(true);
+    let card = document.querySelector(`.map__card`);
+
+    if (!card) {
+      card = cardTemplate.cloneNode(true);
+    }
+
     const cardPhotos = card.querySelector(`.popup__photos`);
     const cardFeatures = card.querySelector(`.popup__features`);
     const photoTemplate = cardPhotos.querySelector(`.popup__photo`);
@@ -170,27 +182,45 @@
     let newCard;
 
     if (filterCallback) {
-      data = window.filter.filterHousing(data);
+      data = filterCallback(data);
     }
-
-    clearPins(pinPlaces);
 
     const pinFragment = document.createDocumentFragment();
 
     const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
-      newPin = createPlace(data[i]);
-      newPin.addEventListener(`click`, () => {
-        let cards = pinPlaces.querySelectorAll(`.map__card`);
-        cards.forEach((el) => {
-          el.remove();
-        });
-        newCard = createCard(data[i]);
-        pinPlaces.appendChild(newCard);
-        popup = document.querySelector(`.popup`);
-        openPopup();
-      });
+      newPin = createPlace(data[i], i);
+      // newPin.addEventListener(`click`, () => {
+      //   let cards = pinPlaces.querySelectorAll(`.map__card`);
+      //   cards.forEach((el) => {
+      //     el.remove();
+      //   });
+      //   newCard = createCard(data[i]);
+      //   pinPlaces.appendChild(newCard);
+      //   popup = document.querySelector(`.popup`);
+      //   openPopup();
+      // });
+      pinFragment.appendChild(newPin);
+    }
+
+    pinPlaces.appendChild(pinFragment);
+  };
+
+  const filterFragments = (arr, filterCallback) => {
+    let data = [...arr];
+    data = filterCallback(data);
+
+    clearPins(pinPlaces);
+
+    const pinFragment = document.createDocumentFragment();
+
+    let newPin;
+
+    const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
+
+    for (let i = 0; i < takeNumber; i++) {
+      newPin = createPlace(data[i], i);
       pinFragment.appendChild(newPin);
     }
 
@@ -201,6 +231,7 @@
     getAddressCoords,
     setAddress,
     renderFragment,
+    filterFragments
   };
 
 })();
