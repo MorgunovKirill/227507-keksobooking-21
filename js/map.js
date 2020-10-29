@@ -12,7 +12,6 @@
     palace: `Дворец`
   };
 
-  let popup;
   const pin = document.querySelector(`.map__pin--main`);
   const pinPlaces = document.querySelector(`.map__pins`);
   const placeTemplate = document.querySelector(`#pin`)
@@ -28,31 +27,26 @@
   };
 
 
-  const openPopup = function () {
-    if (popup) {
-      popup.classList.remove(`hidden`);
-      popup.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
-    }
-    document.addEventListener(`keydown`, onPopupEscPress);
-  };
+  // const openPopup = function () {
+  //   if (popup) {
+  //     popup.classList.remove(`hidden`);
+  //     popup.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
+  //   }
+  //   document.addEventListener(`keydown`, onPopupEscPress);
+  // };
 
 
   const closePopup = function () {
-    popup.classList.add(`hidden`);
+    const card = document.querySelector(`.map__card`);
+    card.classList.add(`hidden`);
 
     document.removeEventListener(`keydown`, onPopupEscPress);
-    popup.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+    card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
   };
 
   const clearPins = (container) => {
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
       container.removeChild(element);
-    });
-  };
-
-  const hidePins = (pins) => {
-    pins.forEach(function (element) {
-      element.classList.add(`hidden`);
     });
   };
 
@@ -72,10 +66,24 @@
   const checkData = (data, element) => {
 
     if (!data) {
-      element.remove();
+      element.innerHTML = ``;
       return false;
     }
     return true;
+  };
+
+  const cardHandler = (obj) => {
+    const card = document.querySelector(`.map__card`);
+
+    if (!card) {
+      pinPlaces.appendChild(createCard(obj));
+    } else {
+      card.classList.add(`hidden`);
+      createCard(obj);
+      card.classList.remove(`hidden`);
+    }
+
+    document.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
   };
 
   const createCard = (obj) => {
@@ -87,7 +95,6 @@
 
     const cardPhotos = card.querySelector(`.popup__photos`);
     const cardFeatures = card.querySelector(`.popup__features`);
-    const photoTemplate = cardPhotos.querySelector(`.popup__photo`);
 
     const features = obj.offer.features;
     const photos = obj.offer.photos;
@@ -149,7 +156,11 @@
       const photosFragment = document.createDocumentFragment();
 
       for (let i = 0; i < photos.length; i++) {
-        let newPhoto = photoTemplate.cloneNode(true);
+        let newPhoto = document.createElement(`img`);
+        newPhoto.classList.add(`popup__photo`);
+        newPhoto.setAttribute(`width`, `45`);
+        newPhoto.setAttribute(`height`, `40`);
+        newPhoto.setAttribute(`alt`, `Фотография жилья`);
         newPhoto.setAttribute(`src`, photos[i]);
         photosFragment.appendChild(newPhoto);
       }
@@ -175,15 +186,10 @@
     return x + ` , ` + y;
   };
 
-  const renderFragment = (arr, filterCallback) => {
+  const renderFragment = (arr) => {
 
     let data = [...arr];
     let newPin;
-    let newCard;
-
-    if (filterCallback) {
-      data = filterCallback(data);
-    }
 
     const pinFragment = document.createDocumentFragment();
 
@@ -191,40 +197,30 @@
 
     for (let i = 0; i < takeNumber; i++) {
       newPin = createPlace(data[i], i);
-      // newPin.addEventListener(`click`, () => {
-      //   let cards = pinPlaces.querySelectorAll(`.map__card`);
-      //   cards.forEach((el) => {
-      //     el.remove();
-      //   });
-      //   newCard = createCard(data[i]);
-      //   pinPlaces.appendChild(newCard);
-      //   popup = document.querySelector(`.popup`);
-      //   openPopup();
-      // });
+      newPin.addEventListener(`click`, () => {
+        cardHandler(data[i]);
+      });
       pinFragment.appendChild(newPin);
     }
 
     pinPlaces.appendChild(pinFragment);
   };
 
+  // let cards = pinPlaces.querySelectorAll(`.map__card`);
+  // cards.forEach((el) => {
+  //   el.remove();
+  // });
+  // newCard = createCard(data[i]);
+  // pinPlaces.appendChild(newCard);
+  // popup = document.querySelector(`.popup`);
+  // openPopup();
+
   const filterFragments = (arr, filterCallback) => {
-    let data = [...arr];
-    data = filterCallback(data);
+    const filtered = filterCallback(arr);
 
     clearPins(pinPlaces);
 
-    const pinFragment = document.createDocumentFragment();
-
-    let newPin;
-
-    const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
-
-    for (let i = 0; i < takeNumber; i++) {
-      newPin = createPlace(data[i], i);
-      pinFragment.appendChild(newPin);
-    }
-
-    pinPlaces.appendChild(pinFragment);
+    renderFragment(filtered);
   };
 
   window.map = {
