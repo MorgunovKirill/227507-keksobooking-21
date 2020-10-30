@@ -12,11 +12,8 @@
     palace: `Дворец`
   };
 
-
   const pin = document.querySelector(`.map__pin--main`);
   const pinPlaces = document.querySelector(`.map__pins`);
-
-
   const placeTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
@@ -25,6 +22,17 @@
   .content
   .querySelector(`.map__card`);
 
+  const onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+  const closePopup = function () {
+    const card = document.querySelector(`.map__card`);
+    card.classList.add(`hidden`);
+
+    card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+    document.removeEventListener(`keydown`, onPopupEscPress);
+  };
 
   const clearPins = (container) => {
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
@@ -32,10 +40,11 @@
     });
   };
 
-  const createPlace = (place) => {
+  const createPlace = (place, index) => {
     let placeElement = placeTemplate.cloneNode(true);
     let placeImg = placeElement.querySelector(`img`);
 
+    placeElement.setAttribute(`data-id`, index);
     placeElement.style.left = `${place.location.x - (PIN_WIDTH / 2)}px`;
     placeElement.style.top = `${place.location.y - PIN_HEIGHT}px`;
     placeImg.setAttribute(`src`, place.author.avatar);
@@ -45,18 +54,39 @@
   };
 
   const checkData = (data, element) => {
-    if (!data.length) {
-      element.remove();
+
+    if (!data) {
+      element.innerHTML = ``;
       return false;
     }
     return true;
   };
 
+  const cardHandler = (obj) => {
+    const card = document.querySelector(`.map__card`);
+
+    if (!card) {
+      pinPlaces.appendChild(createCard(obj));
+    } else {
+      card.classList.add(`hidden`);
+      createCard(obj);
+      card.classList.remove(`hidden`);
+    }
+
+    document.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
+    document.addEventListener(`keydown`, onPopupEscPress);
+  };
+
   const createCard = (obj) => {
-    const card = cardTemplate.cloneNode(true);
+    let card = document.querySelector(`.map__card`);
+
+    if (!card) {
+      card = cardTemplate.cloneNode(true);
+    }
+
     const cardPhotos = card.querySelector(`.popup__photos`);
     const cardFeatures = card.querySelector(`.popup__features`);
-    const photoTemplate = cardPhotos.querySelector(`.popup__photo`);
+
     const features = obj.offer.features;
     const photos = obj.offer.photos;
 
@@ -117,7 +147,11 @@
       const photosFragment = document.createDocumentFragment();
 
       for (let i = 0; i < photos.length; i++) {
-        let newPhoto = photoTemplate.cloneNode(true);
+        let newPhoto = document.createElement(`img`);
+        newPhoto.classList.add(`popup__photo`);
+        newPhoto.setAttribute(`width`, `45`);
+        newPhoto.setAttribute(`height`, `40`);
+        newPhoto.setAttribute(`alt`, `Фотография жилья`);
         newPhoto.setAttribute(`src`, photos[i]);
         photosFragment.appendChild(newPhoto);
       }
@@ -143,35 +177,39 @@
     return x + ` , ` + y;
   };
 
-  const renderFragment = (arr, filterCallback) => {
+  const renderFragment = (arr) => {
 
     let data = [...arr];
-
-    if (filterCallback) {
-      data = window.filter.filterHousing(data);
-    }
-
-    clearPins(pinPlaces);
+    let newPin;
 
     const pinFragment = document.createDocumentFragment();
 
     const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
-      pinFragment.appendChild(createPlace(data[i]));
+      newPin = createPlace(data[i], i);
+      newPin.addEventListener(`click`, () => {
+        cardHandler(data[i]);
+      });
+      pinFragment.appendChild(newPin);
     }
 
     pinPlaces.appendChild(pinFragment);
+  };
 
-    let card = createCard(data[0]);
+  const filterFragments = (arr, filterCallback) => {
+    const filtered = filterCallback(arr);
 
-    pinPlaces.appendChild(card);
+    clearPins(pinPlaces);
+
+    renderFragment(filtered);
   };
 
   window.map = {
     getAddressCoords,
     setAddress,
     renderFragment,
+    filterFragments
   };
 
 })();
