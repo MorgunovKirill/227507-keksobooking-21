@@ -26,22 +26,12 @@
     window.util.isEscEvent(evt, closePopup);
   };
 
-
-  // const openPopup = function () {
-  //   if (popup) {
-  //     popup.classList.remove(`hidden`);
-  //     popup.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
-  //   }
-  //   document.addEventListener(`keydown`, onPopupEscPress);
-  // };
-
-
   const closePopup = function () {
     const card = document.querySelector(`.map__card`);
     card.classList.add(`hidden`);
 
-    document.removeEventListener(`keydown`, onPopupEscPress);
     card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+    document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
   const clearPins = (container) => {
@@ -84,6 +74,7 @@
     }
 
     document.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
+    document.addEventListener(`keydown`, onPopupEscPress);
   };
 
   const createCard = (obj) => {
@@ -205,15 +196,6 @@
 
     pinPlaces.appendChild(pinFragment);
   };
-
-  // let cards = pinPlaces.querySelectorAll(`.map__card`);
-  // cards.forEach((el) => {
-  //   el.remove();
-  // });
-  // newCard = createCard(data[i]);
-  // pinPlaces.appendChild(newCard);
-  // popup = document.querySelector(`.popup`);
-  // openPopup();
 
   const filterFragments = (arr, filterCallback) => {
     const filtered = filterCallback(arr);
