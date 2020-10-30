@@ -48,8 +48,6 @@
     window.form.removeAttributeDisabled(filtersFormSelects);
 
     filtersForm.classList.remove(`map__filters--disabled`);
-
-    address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
   };
 
   window.form.checkTitle();
@@ -70,17 +68,14 @@
   avatar.setAttribute(`accept`, `image/png, image/jpeg`);
   images.setAttribute(`accept`, `image/png, image/jpeg`);
 
-  pin.addEventListener(`mousedown`, function (evt) {
-    if (evt.button === 0) {
-      activate();
-    }
-  });
-
+  pin.addEventListener(`click`, activate);
   pin.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
       activate();
     }
   });
+
+  window.drag.dragHandler(pin, activate);
 
   housingType.addEventListener(`change`, () => {
     window.map.filterFragments(offers, window.filter.filterHousing);
@@ -88,4 +83,5 @@
 
   init();
   window.backend.load(successHandler, window.backend.errorHandler);
+
 })();
