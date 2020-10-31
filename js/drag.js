@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  const PIN_WIDTH = 62;
+  const MAX_Y = 630;
+  const MIN_Y = 130;
+
   const adForm = document.querySelector(`.ad-form`);
   const address = adForm.querySelector(`#address`);
   const pin = document.querySelector(`.map__pin--main`);
@@ -23,14 +27,34 @@
 
         dragged = true;
 
+        const clientWindow = document.documentElement.offsetWidth;
+        const container = handleElement.parentElement.offsetWidth;
+        const minX = ((clientWindow - container) / 2) - PIN_WIDTH / 4;
+        const maxX = minX + container;
+
+        let moveX = moveEvt.clientX;
+        let moveY = moveEvt.clientY;
+
+        if (moveX > maxX) {
+          moveX = maxX;
+        } else if (moveX < minX) {
+          moveX = minX;
+        }
+
+        if (moveY > MAX_Y) {
+          moveY = MAX_Y;
+        } else if (moveY < MIN_Y) {
+          moveY = MIN_Y;
+        }
+
         let shift = {
-          x: startCoords.x - moveEvt.clientX,
-          y: startCoords.y - moveEvt.clientY
+          x: startCoords.x - moveX,
+          y: startCoords.y - moveY,
         };
 
         startCoords = {
-          x: moveEvt.clientX,
-          y: moveEvt.clientY
+          x: moveX,
+          y: moveY
         };
 
         handleElement.style.top = (handleElement.offsetTop - shift.y) + `px`;
