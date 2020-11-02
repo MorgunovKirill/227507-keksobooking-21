@@ -15,39 +15,15 @@
   const timeOut = adForm.querySelector(`#timeout`);
   const avatar = adForm.querySelector(`#avatar`);
   const images = adForm.querySelector(`#images`);
-  const housingType = document.getElementById(`housing-type`);
 
-  const map = document.querySelector(`.map`);
   const pin = document.querySelector(`.map__pin--main`);
-  let offers = [];
-
-  const successHandler = (data) => {
-    offers = [...data];
-  };
 
   const init = () => {
-    address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
+    window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
     filtersForm.classList.add(`map__filters--disabled`);
     window.form.addAttributeDisabled(adFormElements);
     window.form.addAttributeDisabled(filtersFormFields);
     window.form.addAttributeDisabled(filtersFormSelects);
-  };
-
-  const activate = () => {
-
-    if (map.classList.contains(`map--faded`)) {
-      window.map.renderFragment(offers);
-    }
-
-    map.classList.remove(`map--faded`);
-
-    adForm.classList.remove(`ad-form--disabled`);
-
-    window.form.removeAttributeDisabled(adFormElements);
-    window.form.removeAttributeDisabled(filtersFormFields);
-    window.form.removeAttributeDisabled(filtersFormSelects);
-
-    filtersForm.classList.remove(`map__filters--disabled`);
   };
 
   window.form.checkTitle();
@@ -68,20 +44,14 @@
   avatar.setAttribute(`accept`, `image/png, image/jpeg`);
   images.setAttribute(`accept`, `image/png, image/jpeg`);
 
-  pin.addEventListener(`click`, activate);
+
   pin.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
-      activate();
+      window.form.activate();
     }
   });
 
-  window.drag.dragHandler(pin, activate);
-
-  housingType.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterHousing);
-  });
+  window.drag.dragHandler(pin);
 
   init();
-  window.backend.load(successHandler, window.backend.errorHandler);
-
 })();

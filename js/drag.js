@@ -1,14 +1,16 @@
 'use strict';
 (function () {
   const PIN_WIDTH = 62;
+  const PIN_HEIGHT = 62;
   const MAX_Y = 630;
   const MIN_Y = 130;
+  const MAP_MIN_X = 0;
 
-  const adForm = document.querySelector(`.ad-form`);
-  const address = adForm.querySelector(`#address`);
-  const pin = document.querySelector(`.map__pin--main`);
 
-  const dragHandler = (handleElement, activateHandler) => {
+  const map = document.querySelector(`.map`);
+  const MAP_MAX_X = map.offsetWidth;
+
+  const dragHandler = (handleElement) => {
 
     handleElement.addEventListener(`mousedown`, function (evt) {
       evt.preventDefault();
@@ -23,55 +25,47 @@
       const onMouseMove = (moveEvt) => {
         moveEvt.preventDefault();
 
-        address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
-
         dragged = true;
 
-        const clientWindow = document.documentElement.offsetWidth;
-        const container = handleElement.parentElement.offsetWidth;
-        const minX = ((clientWindow - container) / 2) - PIN_WIDTH / 4;
-        const maxX = minX + container;
-
-        let moveX = moveEvt.clientX;
-        let moveY = moveEvt.clientY;
-
-        if (moveX > maxX) {
-          moveX = maxX;
-        } else if (moveX < minX) {
-          moveX = minX;
-        }
-
-        if (moveY > MAX_Y) {
-          moveY = MAX_Y;
-        } else if (moveY < MIN_Y) {
-          moveY = MIN_Y;
-        }
-
         let shift = {
-          x: startCoords.x - moveX,
-          y: startCoords.y - moveY,
+          x: startCoords.x - moveEvt.clientX,
+          y: startCoords.y - moveEvt.clientY
         };
 
         startCoords = {
-          x: moveX,
-          y: moveY
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
         };
 
-        handleElement.style.top = (handleElement.offsetTop - shift.y) + `px`;
-        handleElement.style.left = (handleElement.offsetLeft - shift.x) + `px`;
+        let newPositionY = handleElement.style.top = (handleElement.offsetTop - shift.y);
+        let newPositionX = handleElement.style.left = (handleElement.offsetLeft - shift.x);
+
+        if (newPositionY <= (MIN_Y - PIN_HEIGHT)) {
+          newPositionY = MIN_Y - PIN_HEIGHT;
+        } else if (newPositionY >= MAX_Y) {
+          newPositionY = MAX_Y;
+        }
+
+        if (newPositionX <= (MAP_MIN_X - PIN_WIDTH / 2)) {
+          newPositionX = MAP_MIN_X - PIN_WIDTH / 2;
+        } else if (newPositionX > (MAP_MAX_X - PIN_WIDTH / 2)) {
+          newPositionX = MAP_MAX_X - PIN_WIDTH / 2;
+        }
+
+        handleElement.style.top = newPositionY + `px`;
+        handleElement.style.left = newPositionX + `px`;
+
+        window.map.setAddress(newPositionX, newPositionY);
       };
 
       const onMouseUp = function (upEvt) {
         upEvt.preventDefault();
-        address.value = window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
 
         document.removeEventListener(`mousemove`, onMouseMove);
         document.removeEventListener(`mouseup`, onMouseUp);
 
-        if (dragged) {
-          handleElement.removeEventListener(`click`, activateHandler);
-        } else {
-          handleElement.addEventListener(`click`, activateHandler);
+        if (!dragged) {
+          window.form.activate();
         }
       };
 

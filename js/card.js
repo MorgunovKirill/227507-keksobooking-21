@@ -2,7 +2,7 @@
 
 (function () {
   const pinPlaces = document.querySelector(`.map__pins`);
-  const PLACE_TYPES = {
+  const PlaceTypes = {
     flat: `Квартира`,
     bungalow: `Бунгало`,
     house: `Дом`,
@@ -80,7 +80,7 @@
 
 
     if (checkData(obj.offer.type, card.querySelector(`.popup__type`))) {
-      card.querySelector(`.popup__type`).textContent = PLACE_TYPES[obj.offer.type];
+      card.querySelector(`.popup__type`).textContent = PlaceTypes[obj.offer.type];
     }
 
     if (checkData(obj.offer.rooms, card.querySelector(`.popup__text--capacity`))) {

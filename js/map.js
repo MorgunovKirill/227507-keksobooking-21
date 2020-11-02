@@ -8,6 +8,8 @@
 
   const pin = document.querySelector(`.map__pin--main`);
   const pinPlaces = document.querySelector(`.map__pins`);
+  const adForm = document.querySelector(`.ad-form`);
+  const address = adForm.querySelector(`#address`);
   const placeTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
@@ -37,8 +39,9 @@
       y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
     };
   };
+
   const setAddress = (x, y) => {
-    return x + ` , ` + y;
+    address.value = x + ` , ` + y;
   };
 
   const renderFragment = (arr) => {
