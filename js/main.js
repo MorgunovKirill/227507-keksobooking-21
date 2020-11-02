@@ -44,6 +44,7 @@
   avatar.setAttribute(`accept`, `image/png, image/jpeg`);
   images.setAttribute(`accept`, `image/png, image/jpeg`);
 
+  pin.addEventListener(`click`, window.form.activate);
 
   pin.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {

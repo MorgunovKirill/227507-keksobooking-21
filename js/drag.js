@@ -20,12 +20,9 @@
         y: evt.clientY
       };
 
-      let dragged = false;
 
       const onMouseMove = (moveEvt) => {
         moveEvt.preventDefault();
-
-        dragged = true;
 
         let shift = {
           x: startCoords.x - moveEvt.clientX,
@@ -63,10 +60,6 @@
 
         document.removeEventListener(`mousemove`, onMouseMove);
         document.removeEventListener(`mouseup`, onMouseUp);
-
-        if (!dragged) {
-          window.form.activate();
-        }
       };
 
       document.addEventListener(`mousemove`, onMouseMove);
