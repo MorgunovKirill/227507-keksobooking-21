@@ -1,6 +1,12 @@
 'use strict';
 
 (function () {
+  const MAX_ROOMS = 100;
+  const PALACE_TYPE = `palace`;
+  const HOUSE_TYPE = `house`;
+  const FLAT_TYPE = `flat`;
+  const BUNGALOW_TYPE = `bungalow`;
+
   const adForm = document.querySelector(`.ad-form`);
   const rooms = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
@@ -9,17 +15,25 @@
   const price = adForm.querySelector(`#price`);
   const timeIn = adForm.querySelector(`#timein`);
   const timeOut = adForm.querySelector(`#timeout`);
-  const MAX_ROOMS = 100;
-  const PALACE_TYPE = `palace`;
-  const HOUSE_TYPE = `house`;
-  const FLAT_TYPE = `flat`;
-  const BUNGALOW_TYPE = `bungalow`;
+  const map = document.querySelector(`.map`);
+  const adFormElements = adForm.querySelectorAll(`fieldset`);
+  const filtersForm = document.querySelector(`.map__filters`);
+  const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
+  const filtersFormSelects = filtersForm.querySelectorAll(`select`);
+  const housingType = document.getElementById(`housing-type`);
+
 
   const priceMinMap = {
     [PALACE_TYPE]: 10000,
     [HOUSE_TYPE]: 5000,
     [FLAT_TYPE]: 1000,
     [BUNGALOW_TYPE]: 0,
+  };
+
+  let offers = [];
+
+  const successHandler = (data) => {
+    offers = [...data];
   };
 
 
@@ -94,6 +108,29 @@
     }
   };
 
+  const activate = () => {
+
+    if (map.classList.contains(`map--faded`)) {
+      window.map.renderFragment(offers);
+    }
+
+    map.classList.remove(`map--faded`);
+
+    adForm.classList.remove(`ad-form--disabled`);
+
+    removeAttributeDisabled(adFormElements);
+    removeAttributeDisabled(filtersFormFields);
+    removeAttributeDisabled(filtersFormSelects);
+
+    filtersForm.classList.remove(`map__filters--disabled`);
+  };
+
+  housingType.addEventListener(`change`, () => {
+    window.map.filterFragments(offers, window.filter.filterHousing);
+  });
+
+  window.backend.load(successHandler, window.backend.errorHandler);
+
   window.form = {
     addAttributeDisabled,
     removeAttributeDisabled,
@@ -101,7 +138,8 @@
     checkTitle,
     checkType,
     checkTimeIn,
-    checkTimeOut
+    checkTimeOut,
+    activate
   };
 
 })();
