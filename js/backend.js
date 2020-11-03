@@ -6,8 +6,39 @@
     OK: 200
   };
   const TIMEOUT_IN_MS = 10000;
+  const successMessage = document.querySelector(`#success`)
+  .content
+  .querySelector(`.success`);
+  const uploadErrorMessage = document.querySelector(`#error`)
+  .content
+  .querySelector(`.error`);
 
-  const errorHandler = function (errorMessage) {
+  const successHandler = () => {
+    document.body.insertAdjacentElement(`afterbegin`, successMessage);
+    document.addEventListener(`keydown`, (e)=>{
+      window.util.isEscEvent(e, () => {
+        successMessage.remove();
+      });
+    });
+    document.addEventListener(`click`, ()=> {
+      successMessage.remove();
+    });
+  };
+
+  const uploadErrorHandler = () => {
+    document.body.insertAdjacentElement(`afterbegin`, uploadErrorMessage);
+    document.addEventListener(`keydown`, (e)=>{
+      window.util.isEscEvent(e, () => {
+        uploadErrorMessage.remove();
+      });
+    });
+    document.addEventListener(`click`, ()=> {
+      uploadErrorMessage.remove();
+    });
+  };
+
+
+  const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.classList.add(`server-error`);
 
@@ -48,7 +79,7 @@
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
     xhr.open(`POST`, URL_SEND);
-    xhr.timeout = TIMEOUT_IN_MS;
+    xhr.timeout = 1;
 
     statusHandler(xhr, loadCb, errorCb);
 
@@ -59,6 +90,8 @@
   window.backend = {
     load,
     upload,
-    errorHandler
+    errorHandler,
+    successHandler,
+    uploadErrorHandler
   };
 })();

@@ -20,6 +20,7 @@
   const pinPlaces = document.querySelector(`.map__pins`);
   const pin = document.querySelector(`.map__pin--main`);
 
+
   const init = () => {
     window.map.clearPins(pinPlaces);
     map.classList.add(`map--faded`);
@@ -60,9 +61,13 @@
 
   adForm.addEventListener(`submit`, function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), init);
-  }, window.backend.errorHandler);
+    window.backend.upload(new FormData(adForm), () => {
+      init();
+      window.backend.successHandler();
+    }, window.backend.uploadErrorHandler);
+  });
 
   init();
 })();
+
 
