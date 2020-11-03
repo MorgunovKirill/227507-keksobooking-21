@@ -15,6 +15,10 @@
   .querySelector(`.map__pin`);
 
   const clearPins = (container) => {
+    let card = container.querySelector(`.map__card`);
+    if (card) {
+      container.removeChild(card);
+    }
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
       container.removeChild(element);
     });
@@ -76,7 +80,8 @@
     getAddressCoords,
     setAddress,
     renderFragment,
-    filterFragments
+    filterFragments,
+    clearPins
   };
 
 })();

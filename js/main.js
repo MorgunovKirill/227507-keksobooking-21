@@ -15,10 +15,14 @@
   const timeOut = adForm.querySelector(`#timeout`);
   const avatar = adForm.querySelector(`#avatar`);
   const images = adForm.querySelector(`#images`);
+  const map = document.querySelector(`.map`);
 
+  const pinPlaces = document.querySelector(`.map__pins`);
   const pin = document.querySelector(`.map__pin--main`);
 
   const init = () => {
+    window.map.clearPins(pinPlaces);
+    map.classList.add(`map--faded`);
     window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
     filtersForm.classList.add(`map__filters--disabled`);
     window.form.addAttributeDisabled(adFormElements);
@@ -54,5 +58,11 @@
 
   window.drag.dragHandler(pin);
 
+  adForm.addEventListener(`submit`, function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), init);
+  }, window.backend.errorHandler);
+
   init();
 })();
+

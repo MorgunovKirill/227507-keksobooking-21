@@ -1,6 +1,7 @@
 'use strict';
 (function () {
-  const URL = `https://21.javascript.pages.academy/keksobooking/data`;
+  const URL_SEND = `https://21.javascript.pages.academy/keksobooking`;
+  const URL_GET = `https://21.javascript.pages.academy/keksobooking/data`;
   const StatusCode = {
     OK: 200
   };
@@ -36,25 +37,24 @@
   const load = (loadCb, errorCb) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
-    xhr.open(`GET`, URL);
+    xhr.open(`GET`, URL_GET);
     xhr.timeout = TIMEOUT_IN_MS;
 
     statusHandler(xhr, loadCb, errorCb);
     xhr.send();
   };
 
-  const upload = (data, successHandler) => {
+  const upload = (data, loadCb, errorCb) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
-    xhr.open(`POST`, URL);
+    xhr.open(`POST`, URL_SEND);
     xhr.timeout = TIMEOUT_IN_MS;
 
-    xhr.addEventListener(`load`, function () {
-      successHandler(xhr.response);
-    });
+    statusHandler(xhr, loadCb, errorCb);
 
     xhr.send(data);
   };
+
 
   window.backend = {
     load,
