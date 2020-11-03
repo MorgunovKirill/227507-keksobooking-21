@@ -79,7 +79,7 @@
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
     xhr.open(`POST`, URL_SEND);
-    xhr.timeout = 1;
+    xhr.timeout = TIMEOUT_IN_MS;
 
     statusHandler(xhr, loadCb, errorCb);
 
