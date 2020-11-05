@@ -2,7 +2,7 @@
 
 (function () {
   const ESC_KEYCODE = 27;
-  const DEBOUNCE_INTERVAL = 300; // ms
+  const DEBOUNCE_INTERVAL = 500; // ms
   let lastTimeout;
 
   const isEscEvent = (evt, action) => {

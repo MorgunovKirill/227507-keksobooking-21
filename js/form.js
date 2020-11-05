@@ -130,23 +130,23 @@
   };
 
   housingType.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterPlaces);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
   housingPrice.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterPlaces);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
   housingRooms.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterPlaces);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
   housingGuests.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterPlaces);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
   housingFeatures.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterPlaces);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
 

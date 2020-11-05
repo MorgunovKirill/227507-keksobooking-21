@@ -97,42 +97,6 @@
     return filtered;
   };
 
-  // const filterHousing = (arr) => {
-  //   if (housingType.value === `any`) {
-  //     return arr;
-  //   }
-  //   let filtered = arr.filter((element) => {
-  //     return element.offer.type === housingType.value;
-  //   });
-
-  //   return filtered;
-  // };
-
-  // const filterPrice = (arr) => {
-  //   let filtered;
-  //   switch (housingPrice.value) {
-  //     case `any`:
-  //       return arr;
-  //     case `low`:
-  //       filtered = arr.filter((element) => {
-  //         return element.offer.price < 10000;
-  //       });
-  //       break;
-  //     case `middle`:
-  //       filtered = arr.filter((element) => {
-  //         return (element.offer.price >= 10000 && element.offer.price < 50000);
-  //       });
-  //       break;
-  //     case `high`:
-  //       filtered = arr.filter((element) => {
-  //         return (element.offer.price >= 10000 && element.offer.price < 50000);
-  //       });
-  //       break;
-  //   }
-
-  //   return filtered;
-  // };
-
   window.filter = {
     filterPlaces,
   };
