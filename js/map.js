@@ -52,7 +52,6 @@
 
     let data = [...arr];
     let newPin;
-
     const pinFragment = document.createDocumentFragment();
 
     const takeNumber = data.length > MAX_PINS_TO_SHOW ? MAX_PINS_TO_SHOW : data.length;
