@@ -13,15 +13,17 @@
   .content
   .querySelector(`.map__card`);
 
-  const onPopupEscPress = function (evt) {
+  const onPopupEscPress = (evt) => {
     window.util.isEscEvent(evt, closePopup);
   };
 
-  const closePopup = function () {
+  const closePopup = () => {
     const card = document.querySelector(`.map__card`);
-    card.classList.add(`hidden`);
 
-    card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+    if (card) {
+      card.classList.add(`hidden`);
+      card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
+    }
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
