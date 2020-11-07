@@ -1,97 +1,77 @@
 'use strict';
 
 (function () {
+  const VALUE_ANY = `any`;
+  const PRICE_MAP = {
+    low: {
+      min: 0,
+      max: 10000
+    },
+    middle: {
+      min: 10000,
+      max: 50000
+    },
+    high: {
+      min: 50000,
+      max: Infinity
+    }
+  };
+
   const housingType = document.querySelector(`#housing-type`);
   const housingPrice = document.querySelector(`#housing-price`);
   const housingRooms = document.querySelector(`#housing-rooms`);
   const housingGuests = document.querySelector(`#housing-guests`);
   const housingFeatures = document.querySelector(`#housing-features`);
+  const filterWifiCheckbox = housingFeatures.querySelector(`#filter-wifi`);
+  const dishwasherCheckbox = housingFeatures.querySelector(`#filter-dishwasher`);
+  const parkingCheckbox = housingFeatures.querySelector(`#filter-parking`);
+  const washerCheckbox = housingFeatures.querySelector(`#filter-washer`);
+  const elevatorCheckbox = housingFeatures.querySelector(`#filter-elevator`);
+  const conditionerCheckbox = housingFeatures.querySelector(`#filter-conditioner`);
+
+  const getFilterType = (item) => {
+    return housingType.value === VALUE_ANY ? true : item.offer.type === housingType.value;
+  };
+
+  const getFilterPrice = (item) => {
+    return housingPrice.value === VALUE_ANY ? true :
+      item.offer.price <= PRICE_MAP[housingPrice.value].max &&
+      item.offer.price >= PRICE_MAP[housingPrice.value].min;
+  };
+
+  const getFilterRooms = (item) => {
+    return housingRooms.value === VALUE_ANY ? true : item.offer.rooms === parseInt(housingRooms.value, 10);
+  };
+
+  const getFilterGuests = (item) => {
+    return housingGuests.value === VALUE_ANY ? true : item.offer.guests === parseInt(housingGuests.value, 10);
+  };
+
+  const getFilterFeature = (item, feature) => {
+    if (feature.checked && !item.offer.features.includes(feature.value)) {
+      return false;
+    }
+    return true;
+  };
 
   const filterPlaces = (arr) => {
-    let filtered = [...arr];
-    let housingFeaturesList = [...housingFeatures.querySelectorAll(`input:checked`)];
-    let housingFeaturesListValues = housingFeaturesList.map((el) => {
-      return el.value;
-    });
+    let filtered = [];
 
-
-    if (housingType.value !== `any`) {
-      filtered = filtered.filter((element) => {
-        return element.offer.type === housingType.value;
-      });
-    }
-
-    if (housingPrice.value !== `any`) {
-      switch (housingPrice.value) {
-        case `low`:
-          filtered = filtered.filter((element) => {
-            return element.offer.price < 10000;
-          });
-          break;
-        case `middle`:
-          filtered = filtered.filter((element) => {
-            return (element.offer.price >= 10000 && element.offer.price < 50000);
-          });
-          break;
-        case `high`:
-          filtered = filtered.filter((element) => {
-            return (element.offer.price > 50000);
-          });
-          break;
+    for (let i = 0; i < arr.length; i++) {
+      if (
+        getFilterType(arr[i]) &&
+        getFilterPrice(arr[i]) &&
+        getFilterRooms(arr[i]) &&
+        getFilterGuests(arr[i]) &&
+        getFilterFeature(arr[i], filterWifiCheckbox) &&
+        getFilterFeature(arr[i], dishwasherCheckbox) &&
+        getFilterFeature(arr[i], parkingCheckbox) &&
+        getFilterFeature(arr[i], washerCheckbox) &&
+        getFilterFeature(arr[i], elevatorCheckbox) &&
+        getFilterFeature(arr[i], conditionerCheckbox)
+      ) {
+        filtered.push(arr[i]);
       }
-    }
-
-    if (housingRooms.value !== `any`) {
-      switch (housingRooms.value) {
-        case `1`:
-          filtered = filtered.filter((element) => {
-            return element.offer.rooms === 1;
-          });
-          break;
-        case `2`:
-          filtered = filtered.filter((element) => {
-            return element.offer.rooms === 2;
-          });
-          break;
-        case `3`:
-          filtered = filtered.filter((element) => {
-            return element.offer.rooms === 3;
-          });
-          break;
-      }
-    }
-
-    if (housingGuests.value !== `any`) {
-      switch (housingGuests.value) {
-        case `1`:
-          filtered = filtered.filter((element) => {
-            return element.offer.guests === 1;
-          });
-          break;
-        case `2`:
-          filtered = filtered.filter((element) => {
-            return element.offer.guests === 2;
-          });
-          break;
-        case `3`:
-          filtered = filtered.filter((element) => {
-            return element.offer.guests === 3;
-          });
-          break;
-        case `0`:
-          filtered = filtered.filter((element) => {
-            return element.offer.guests > 3;
-          });
-          break;
-      }
-    }
-
-    if (housingFeaturesListValues.length) {
-      housingFeaturesListValues.forEach((el)=>{
-        filtered = filtered.filter((element) => {
-          return element.offer.features.includes(el);
-        });
-      });
     }
 
     return filtered;
