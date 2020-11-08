@@ -2,6 +2,7 @@
 
 (function () {
   const VALUE_ANY = `any`;
+  const MAX_PINS_TO_SHOW = 5;
   const PRICE_MAP = {
     low: {
       min: 0,
@@ -71,6 +72,9 @@
         getFilterFeature(arr[i], conditionerCheckbox)
       ) {
         filtered.push(arr[i]);
+        if (filtered.length === MAX_PINS_TO_SHOW) {
+          break;
+        }
       }
     }
 
