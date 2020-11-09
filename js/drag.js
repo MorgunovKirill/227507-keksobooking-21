@@ -1,7 +1,8 @@
 'use strict';
 (function () {
-  const PIN_WIDTH = 62;
-  const PIN_HEIGHT = 62;
+  const MAIN_PIN_WIDTH = 62;
+  const MAIN_PIN_HEIGHT = 62;
+  const MAIN_PIN_POINTER_HEIGHT = 22;
   const MAX_Y = 630;
   const MIN_Y = 130;
   const MAP_MIN_X = 0;
@@ -37,16 +38,16 @@
         let newPositionY = handleElement.style.top = (handleElement.offsetTop - shift.y);
         let newPositionX = handleElement.style.left = (handleElement.offsetLeft - shift.x);
 
-        if (newPositionY <= (MIN_Y - PIN_HEIGHT)) {
-          newPositionY = MIN_Y - PIN_HEIGHT;
+        if (newPositionY <= (MIN_Y - MAIN_PIN_HEIGHT)) {
+          newPositionY = MIN_Y - MAIN_PIN_HEIGHT;
         } else if (newPositionY >= MAX_Y) {
           newPositionY = MAX_Y;
         }
 
-        if (newPositionX <= (MAP_MIN_X - PIN_WIDTH / 2)) {
-          newPositionX = MAP_MIN_X - PIN_WIDTH / 2;
-        } else if (newPositionX > (MAP_MAX_X - PIN_WIDTH / 2)) {
-          newPositionX = MAP_MAX_X - PIN_WIDTH / 2;
+        if (newPositionX <= (MAP_MIN_X - MAIN_PIN_WIDTH / 2)) {
+          newPositionX = MAP_MIN_X - MAIN_PIN_WIDTH / 2;
+        } else if (newPositionX > (MAP_MAX_X - MAIN_PIN_WIDTH - MAIN_PIN_POINTER_HEIGHT / 2)) {
+          newPositionX = MAP_MAX_X - MAIN_PIN_WIDTH - MAIN_PIN_POINTER_HEIGHT / 2;
         }
 
         handleElement.style.top = newPositionY + `px`;

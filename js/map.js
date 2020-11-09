@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
-  const PIN_WIDTH = 62;
-  const PIN_HEIGHT = 62;
-  const PIN_POINTER_HEIGHT = 22;
+  const MAIN_PIN_WIDTH = 62;
+  const MAIN_PIN_HEIGHT = 62;
+  const MAIN_PIN_POINTER_HEIGHT = 22;
+  const PIN_WIDTH = 50;
+  const PIN_HEIGHT = 70;
   const MAX_PINS_TO_SHOW = 5;
 
-  const pin = document.querySelector(`.map__pin--main`);
   const pinPlaces = document.querySelector(`.map__pins`);
   const adForm = document.querySelector(`.ad-form`);
   const address = adForm.querySelector(`#address`);
@@ -39,8 +40,8 @@
 
   const getAddressCoords = (item) => {
     return {
-      x: (parseInt(item.style.left, 10) + PIN_WIDTH / 2).toFixed(),
-      y: (parseInt(pin.style.top, 10) + PIN_HEIGHT + PIN_POINTER_HEIGHT).toFixed(),
+      x: (parseInt(item.style.left, 10) + MAIN_PIN_WIDTH / 2).toFixed(),
+      y: (parseInt(item.style.top, 10) + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT).toFixed(),
     };
   };
 

@@ -25,7 +25,7 @@
   const housingRooms = document.querySelector(`#housing-rooms`);
   const housingGuests = document.querySelector(`#housing-guests`);
   const housingFeatures = document.querySelector(`#housing-features`);
-
+  const pin = document.querySelector(`.map__pin--main`);
 
   const priceMinMap = {
     [PALACE_TYPE]: 10000,
@@ -117,6 +117,8 @@
     if (map.classList.contains(`map--faded`)) {
       window.map.renderFragment(offers);
     }
+
+    window.map.setAddress(window.map.getAddressCoords(pin)[`x`], window.map.getAddressCoords(pin)[`y`]);
 
     map.classList.remove(`map--faded`);
 
