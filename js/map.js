@@ -25,11 +25,17 @@
     });
   };
 
-  const createPlace = (place, index) => {
+  const activeClassReset = () => {
+    let activePins = pinPlaces.querySelectorAll(`.map__pin--active`);
+    activePins.forEach((el)=>{
+      el.classList.remove(`map__pin--active`);
+    });
+  };
+
+  const createPlace = (place) => {
     let placeElement = placeTemplate.cloneNode(true);
     let placeImg = placeElement.querySelector(`img`);
 
-    placeElement.setAttribute(`data-id`, index);
     placeElement.style.left = `${place.location.x - (PIN_WIDTH / 2)}px`;
     placeElement.style.top = `${place.location.y - PIN_HEIGHT}px`;
     placeImg.setAttribute(`src`, place.author.avatar);
@@ -59,7 +65,9 @@
 
     for (let i = 0; i < takeNumber; i++) {
       newPin = createPlace(data[i], i);
-      newPin.addEventListener(`click`, () => {
+      newPin.addEventListener(`click`, (evt) => {
+        activeClassReset();
+        evt.target.closest(`.map__pin`).classList.add(`map__pin--active`);
         window.card.cardHandler(data[i]);
       });
       pinFragment.appendChild(newPin);
