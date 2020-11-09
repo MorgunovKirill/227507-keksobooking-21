@@ -15,8 +15,8 @@
 
   const successHandler = () => {
     document.body.insertAdjacentElement(`afterbegin`, successMessage);
-    document.addEventListener(`keydown`, (e)=>{
-      window.util.isEscEvent(e, () => {
+    document.addEventListener(`keydown`, (evt)=>{
+      window.util.isEscEvent(evt, () => {
         successMessage.remove();
       });
     });
@@ -27,8 +27,8 @@
 
   const uploadErrorHandler = () => {
     document.body.insertAdjacentElement(`afterbegin`, uploadErrorMessage);
-    document.addEventListener(`keydown`, (e)=>{
-      window.util.isEscEvent(e, () => {
+    document.addEventListener(`keydown`, (evt)=>{
+      window.util.isEscEvent(evt, () => {
         uploadErrorMessage.remove();
       });
     });

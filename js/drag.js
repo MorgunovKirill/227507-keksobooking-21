@@ -13,7 +13,7 @@
 
   const dragHandler = (handleElement) => {
 
-    handleElement.addEventListener(`mousedown`, function (evt) {
+    handleElement.addEventListener(`mousedown`, (evt) => {
       evt.preventDefault();
 
       let startCoords = {
@@ -22,7 +22,7 @@
       };
 
 
-      const onMouseMove = (moveEvt) => {
+      const mouseMoveHandler = (moveEvt) => {
         moveEvt.preventDefault();
 
         let shift = {
@@ -56,15 +56,15 @@
         window.map.setAddress(newPositionX, newPositionY);
       };
 
-      const onMouseUp = function (upEvt) {
+      const mouseUpHandler = (upEvt) => {
         upEvt.preventDefault();
 
-        document.removeEventListener(`mousemove`, onMouseMove);
-        document.removeEventListener(`mouseup`, onMouseUp);
+        document.removeEventListener(`mousemove`, mouseMoveHandler);
+        document.removeEventListener(`mouseup`, mouseUpHandler);
       };
 
-      document.addEventListener(`mousemove`, onMouseMove);
-      document.addEventListener(`mouseup`, onMouseUp);
+      document.addEventListener(`mousemove`, mouseMoveHandler);
+      document.addEventListener(`mouseup`, mouseUpHandler);
     });
   };
 

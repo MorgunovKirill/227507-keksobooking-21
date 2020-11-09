@@ -28,10 +28,10 @@
   };
 
 
-  const checkData = (data, element) => {
+  const checkData = (data, el) => {
 
     if (!data) {
-      element.innerHTML = ``;
+      el.innerHTML = ``;
       return false;
     }
     return true;

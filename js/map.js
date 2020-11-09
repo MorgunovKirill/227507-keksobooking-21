@@ -20,16 +20,16 @@
     if (card) {
       container.removeChild(card);
     }
-    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach(function (element) {
-      container.removeChild(element);
+    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((el) => {
+      container.removeChild(el);
     });
   };
 
-  const activeClassReset = () => {
-    let activePins = pinPlaces.querySelectorAll(`.map__pin--active`);
-    activePins.forEach((el)=>{
-      el.classList.remove(`map__pin--active`);
-    });
+  const resetActiveClass = () => {
+    let activePin = pinPlaces.querySelector(`.map__pin--active`);
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
   };
 
   const createPlace = (place) => {
@@ -66,7 +66,7 @@
     for (let i = 0; i < takeNumber; i++) {
       newPin = createPlace(data[i], i);
       newPin.addEventListener(`click`, (evt) => {
-        activeClassReset();
+        resetActiveClass();
         evt.target.closest(`.map__pin`).classList.add(`map__pin--active`);
         window.card.cardHandler(data[i]);
       });
