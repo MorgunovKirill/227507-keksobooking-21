@@ -20,7 +20,11 @@
   const filtersForm = document.querySelector(`.map__filters`);
   const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
   const filtersFormSelects = filtersForm.querySelectorAll(`select`);
-  const housingType = document.getElementById(`housing-type`);
+  const housingType = document.querySelector(`#housing-type`);
+  const housingPrice = document.querySelector(`#housing-price`);
+  const housingRooms = document.querySelector(`#housing-rooms`);
+  const housingGuests = document.querySelector(`#housing-guests`);
+  const housingFeatures = document.querySelector(`#housing-features`);
 
 
   const priceMinMap = {
@@ -126,8 +130,25 @@
   };
 
   housingType.addEventListener(`change`, () => {
-    window.map.filterFragments(offers, window.filter.filterHousing);
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
+
+  housingPrice.addEventListener(`change`, () => {
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
+  });
+
+  housingRooms.addEventListener(`change`, () => {
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
+  });
+
+  housingGuests.addEventListener(`change`, () => {
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
+  });
+
+  housingFeatures.addEventListener(`change`, () => {
+    window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
+  });
+
 
   window.backend.load(successHandler, window.backend.errorHandler);
 
