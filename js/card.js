@@ -13,18 +13,26 @@
   .content
   .querySelector(`.map__card`);
 
-  const onPopupEscPress = (evt) => {
+  const escPressHandler = (evt) => {
     window.util.isEscEvent(evt, closePopup);
   };
 
+  const resetActiveClass = () => {
+    let activePin = pinPlaces.querySelector(`.map__pin--active`);
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
+  };
+
   const closePopup = () => {
+    resetActiveClass();
     const card = document.querySelector(`.map__card`);
 
     if (card) {
       card.classList.add(`hidden`);
       card.querySelector(`.popup__close`).removeEventListener(`keydown`, closePopup);
     }
-    document.removeEventListener(`keydown`, onPopupEscPress);
+    document.removeEventListener(`keydown`, escPressHandler);
   };
 
 
@@ -37,22 +45,22 @@
     return true;
   };
 
-  const cardHandler = (obj) => {
+  const cardHandler = (object) => {
     const card = document.querySelector(`.map__card`);
 
     if (!card) {
-      pinPlaces.appendChild(createCard(obj));
+      pinPlaces.appendChild(createCard(object));
     } else {
       card.classList.add(`hidden`);
-      createCard(obj);
+      createCard(object);
       card.classList.remove(`hidden`);
     }
 
     document.querySelector(`.popup__close`).addEventListener(`click`, closePopup);
-    document.addEventListener(`keydown`, onPopupEscPress);
+    document.addEventListener(`keydown`, escPressHandler);
   };
 
-  const createCard = (obj) => {
+  const createCard = (object) => {
     let card = document.querySelector(`.map__card`);
 
     if (!card) {
@@ -62,40 +70,40 @@
     const cardPhotos = card.querySelector(`.popup__photos`);
     const cardFeatures = card.querySelector(`.popup__features`);
 
-    const features = obj.offer.features;
-    const photos = obj.offer.photos;
+    const features = object.offer.features;
+    const photos = object.offer.photos;
 
     cardFeatures.innerHTML = ``;
     cardPhotos.innerHTML = ``;
 
-    if (checkData(obj.offer.title, card.querySelector(`.popup__title`))) {
-      card.querySelector(`.popup__title`).textContent = obj.offer.title;
+    if (checkData(object.offer.title, card.querySelector(`.popup__title`))) {
+      card.querySelector(`.popup__title`).textContent = object.offer.title;
     }
 
-    if (checkData(obj.offer.address, card.querySelector(`.popup__text--address`))) {
-      card.querySelector(`.popup__text--address`).textContent = obj.offer.address;
+    if (checkData(object.offer.address, card.querySelector(`.popup__text--address`))) {
+      card.querySelector(`.popup__text--address`).textContent = object.offer.address;
     }
 
-    if (checkData(obj.offer.price, card.querySelector(`.popup__text--price`))) {
-      card.querySelector(`.popup__text--price`).textContent = `${obj.offer.price} ₽/ночь`;
+    if (checkData(object.offer.price, card.querySelector(`.popup__text--price`))) {
+      card.querySelector(`.popup__text--price`).textContent = `${object.offer.price} ₽/ночь`;
     }
 
 
-    if (checkData(obj.offer.type, card.querySelector(`.popup__type`))) {
-      card.querySelector(`.popup__type`).textContent = PlaceTypes[obj.offer.type];
+    if (checkData(object.offer.type, card.querySelector(`.popup__type`))) {
+      card.querySelector(`.popup__type`).textContent = PlaceTypes[object.offer.type];
     }
 
-    if (checkData(obj.offer.rooms, card.querySelector(`.popup__text--capacity`))) {
-      if (obj.offer.guests) {
-        card.querySelector(`.popup__text--capacity`).textContent = `${obj.offer.rooms} комнаты для ${obj.offer.guests} гостей`;
+    if (checkData(object.offer.rooms, card.querySelector(`.popup__text--capacity`))) {
+      if (object.offer.guests) {
+        card.querySelector(`.popup__text--capacity`).textContent = `${object.offer.rooms} комнаты для ${object.offer.guests} гостей`;
       } else {
         card.querySelector(`.popup__text--capacity`).remove();
       }
     }
 
-    if (checkData(obj.offer.checkin, card.querySelector(`.popup__text--time`))) {
-      if (obj.offer.checkout) {
-        card.querySelector(`.popup__text--time`).textContent = `Заезд после ${obj.offer.checkin}, выезд до ${obj.offer.checkout}`;
+    if (checkData(object.offer.checkin, card.querySelector(`.popup__text--time`))) {
+      if (object.offer.checkout) {
+        card.querySelector(`.popup__text--time`).textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
       } else {
         card.querySelector(`.popup__text--time`).remove();
       }
@@ -114,8 +122,8 @@
       cardFeatures.appendChild(featureFragment);
     }
 
-    if (checkData(obj.offer.description, card.querySelector(`.popup__description`))) {
-      card.querySelector(`.popup__description`).textContent = obj.offer.description;
+    if (checkData(object.offer.description, card.querySelector(`.popup__description`))) {
+      card.querySelector(`.popup__description`).textContent = object.offer.description;
     }
 
     if (checkData(photos, cardPhotos)) {
@@ -135,8 +143,8 @@
     }
 
 
-    if (checkData(obj.author.avatar, card.querySelector(`.popup__avatar`))) {
-      card.querySelector(`.popup__avatar`).src = obj.author.avatar;
+    if (checkData(object.author.avatar, card.querySelector(`.popup__avatar`))) {
+      card.querySelector(`.popup__avatar`).src = object.author.avatar;
     }
 
     return card;
@@ -145,6 +153,7 @@
 
   window.card = {
     cardHandler,
+    resetActiveClass
   };
 
 })();

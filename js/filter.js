@@ -55,23 +55,23 @@
     return true;
   };
 
-  const filterPlaces = (arr) => {
+  const filterPlaces = (array) => {
     let filtered = [];
 
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       if (
-        getFilterType(arr[i]) &&
-        getFilterPrice(arr[i]) &&
-        getFilterRooms(arr[i]) &&
-        getFilterGuests(arr[i]) &&
-        getFilterFeature(arr[i], filterWifiCheckbox) &&
-        getFilterFeature(arr[i], dishwasherCheckbox) &&
-        getFilterFeature(arr[i], parkingCheckbox) &&
-        getFilterFeature(arr[i], washerCheckbox) &&
-        getFilterFeature(arr[i], elevatorCheckbox) &&
-        getFilterFeature(arr[i], conditionerCheckbox)
+        getFilterType(array[i]) &&
+        getFilterPrice(array[i]) &&
+        getFilterRooms(array[i]) &&
+        getFilterGuests(array[i]) &&
+        getFilterFeature(array[i], filterWifiCheckbox) &&
+        getFilterFeature(array[i], dishwasherCheckbox) &&
+        getFilterFeature(array[i], parkingCheckbox) &&
+        getFilterFeature(array[i], washerCheckbox) &&
+        getFilterFeature(array[i], elevatorCheckbox) &&
+        getFilterFeature(array[i], conditionerCheckbox)
       ) {
-        filtered.push(arr[i]);
+        filtered.push(array[i]);
         if (filtered.length === MAX_PINS_TO_SHOW) {
           break;
         }
