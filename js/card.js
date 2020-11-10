@@ -17,7 +17,15 @@
     window.util.isEscEvent(evt, closePopup);
   };
 
+  const resetActiveClass = () => {
+    let activePin = pinPlaces.querySelector(`.map__pin--active`);
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
+  };
+
   const closePopup = () => {
+    resetActiveClass();
     const card = document.querySelector(`.map__card`);
 
     if (card) {
@@ -145,6 +153,7 @@
 
   window.card = {
     cardHandler,
+    resetActiveClass
   };
 
 })();

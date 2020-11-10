@@ -25,13 +25,6 @@
     });
   };
 
-  const resetActiveClass = () => {
-    let activePin = pinPlaces.querySelector(`.map__pin--active`);
-    if (activePin) {
-      activePin.classList.remove(`map__pin--active`);
-    }
-  };
-
   const createPlace = (place) => {
     let placeElement = placeTemplate.cloneNode(true);
     let placeImg = placeElement.querySelector(`img`);
@@ -66,7 +59,7 @@
     for (let i = 0; i < takeNumber; i++) {
       newPin = createPlace(data[i], i);
       newPin.addEventListener(`click`, (evt) => {
-        resetActiveClass();
+        window.card.resetActiveClass();
         evt.target.closest(`.map__pin`).classList.add(`map__pin--active`);
         window.card.cardHandler(data[i]);
       });
