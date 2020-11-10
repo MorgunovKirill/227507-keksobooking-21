@@ -20,6 +20,7 @@
   const filtersForm = document.querySelector(`.map__filters`);
   const filtersFormFields = filtersForm.querySelectorAll(`fieldset`);
   const filtersFormSelects = filtersForm.querySelectorAll(`select`);
+  const formResetButton = adForm.querySelector(`.ad-form__reset`);
   const housingType = document.querySelector(`#housing-type`);
   const housingPrice = document.querySelector(`#housing-price`);
   const housingRooms = document.querySelector(`#housing-rooms`);
@@ -40,16 +41,15 @@
     offers = [...data];
   };
 
-
-  const addAttributeDisabled = (arr) => {
-    arr.forEach(function (el) {
-      el.setAttribute(`disabled`, true);
+  const addAttributeDisabled = (array) => {
+    array.forEach(function (element) {
+      element.setAttribute(`disabled`, true);
     });
   };
 
-  const removeAttributeDisabled = (arr) => {
-    arr.forEach(function (el) {
-      el.removeAttribute(`disabled`);
+  const removeAttributeDisabled = (array) => {
+    array.forEach(function (element) {
+      element.removeAttribute(`disabled`);
     });
   };
 
@@ -113,6 +113,9 @@
   };
 
   const activate = () => {
+    // formResetButton.addEventListener(`click`, );
+    pin.removeEventListener(`mousedown`, window.form.mouseMainButtonHandler);
+    pin.removeEventListener(`keydown`, window.form.enterPressHandler);
 
     if (map.classList.contains(`map--faded`)) {
       window.map.renderFragment(offers);
@@ -130,6 +133,15 @@
 
     filtersForm.classList.remove(`map__filters--disabled`);
   };
+
+  const enterPressHandler = (evt) => {
+    window.util.isEnterEvent(evt, activate);
+  };
+
+  const mouseMainButtonHandler = (evt) => {
+    window.util.isMouseMainButton(evt, activate);
+  };
+
 
   housingType.addEventListener(`change`, () => {
     window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
@@ -151,7 +163,6 @@
     window.util.debounce(window.map.filterFragments(offers, window.filter.filterPlaces));
   });
 
-
   window.backend.load(successHandler, window.backend.errorHandler);
 
   window.form = {
@@ -162,7 +173,9 @@
     checkType,
     checkTimeIn,
     checkTimeOut,
-    activate
+    activate,
+    enterPressHandler,
+    mouseMainButtonHandler
   };
 
 })();

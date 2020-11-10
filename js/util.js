@@ -12,6 +12,18 @@
     }
   };
 
+  const isEnterEvent = (evt, action) => {
+    if (evt.key === `Enter`) {
+      action();
+    }
+  };
+
+  const isMouseMainButton = (evt, action) => {
+    if (evt.which === 1) {
+      action();
+    }
+  };
+
   const debounce = (cb) => {
     if (lastTimeout) {
       window.clearTimeout(lastTimeout);
@@ -21,6 +33,8 @@
 
   window.util = {
     isEscEvent,
+    isEnterEvent,
+    isMouseMainButton,
     debounce
   };
 })();

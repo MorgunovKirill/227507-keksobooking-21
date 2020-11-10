@@ -24,6 +24,7 @@
   const timeOut = adForm.querySelector(`#timeout`);
   const avatar = adForm.querySelector(`#avatar`);
   const images = adForm.querySelector(`#images`);
+  const formResetButton = adForm.querySelector(`.ad-form__reset`);
   const map = document.querySelector(`.map`);
 
   const pinPlaces = document.querySelector(`.map__pins`);
@@ -35,20 +36,22 @@
   address.setAttribute(`readonly`, true);
 
   const init = () => {
+    pin.addEventListener(`mousedown`, window.form.mouseMainButtonHandler);
+    pin.addEventListener(`keydown`, window.form.enterPressHandler);
     window.map.clearPins(pinPlaces);
     map.classList.add(`map--faded`);
     pin.style.top = initialPinY + `px`;
     pin.style.left = initialPinX + `px`;
-    window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY + (MAIN_PIN_HEIGHT / 2)));
     filtersForm.classList.add(`map__filters--disabled`);
     adForm.classList.add(`ad-form--disabled`);
     adForm.reset();
+    window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY + (MAIN_PIN_HEIGHT / 2)));
     housingType.value = VALUE_ANY;
     housingPrice.value = VALUE_ANY;
     housingRooms.value = VALUE_ANY;
     housingGuests.value = VALUE_ANY;
-    housingFeatures.forEach((el)=> {
-      el.checked = false;
+    housingFeatures.forEach((element)=> {
+      element.checked = false;
     });
     window.form.addAttributeDisabled(adFormElements);
     window.form.addAttributeDisabled(filtersFormFields);
@@ -72,13 +75,13 @@
   avatar.setAttribute(`accept`, `image/png, image/jpeg`);
   images.setAttribute(`accept`, `image/png, image/jpeg`);
 
-  pin.addEventListener(`click`, window.form.activate);
+  // pin.addEventListener(`click`, window.form.activate);
 
-  pin.addEventListener(`keydown`, function (evt) {
-    if (evt.key === `Enter`) {
-      window.form.activate();
-    }
-  });
+  // pin.addEventListener(`keydown`, function (evt) {
+  //   if (evt.key === `Enter`) {
+  //     window.form.activate();
+  //   }
+  // });
 
   window.drag.dragHandler(pin);
 

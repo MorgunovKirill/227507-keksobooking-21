@@ -20,8 +20,8 @@
     if (card) {
       container.removeChild(card);
     }
-    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((el) => {
-      container.removeChild(el);
+    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => {
+      container.removeChild(element);
     });
   };
 
