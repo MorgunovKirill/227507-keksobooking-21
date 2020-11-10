@@ -30,7 +30,6 @@
   const housingGuests = document.querySelector(`#housing-guests`);
   const housingFeaturesContainer = document.querySelector(`#housing-features`);
   const housingFeatures = housingFeaturesContainer.querySelectorAll(`input`);
-  // const housingFeatures = document.querySelector(`#housing-features`);
   const map = document.querySelector(`.map`);
   const pinPlaces = document.querySelector(`.map__pins`);
   const pin = document.querySelector(`.map__pin--main`);
@@ -148,6 +147,20 @@
     removeAttributeDisabled(filtersFormFields);
     removeAttributeDisabled(filtersFormSelects);
 
+    checkTitle();
+    title.addEventListener(`input`, checkTitle);
+
+    checkType();
+    type.addEventListener(`change`, checkType);
+    price.addEventListener(`input`, checkType);
+
+    checkRoomsValidity();
+    capacity.addEventListener(`change`, checkRoomsValidity);
+    rooms.addEventListener(`change`, checkRoomsValidity);
+
+    timeIn.addEventListener(`change`, checkTimeIn);
+    timeOut.addEventListener(`change`, checkTimeOut);
+
     filtersForm.classList.remove(`map__filters--disabled`);
   };
 
@@ -162,7 +175,7 @@
     filtersForm.classList.add(`map__filters--disabled`);
     adForm.classList.add(`ad-form--disabled`);
     adForm.reset();
-    window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY + (MAIN_PIN_HEIGHT / 2)));
+    window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY - (MAIN_PIN_HEIGHT / 2)));
     housingType.value = VALUE_ANY;
     housingPrice.value = VALUE_ANY;
     housingRooms.value = VALUE_ANY;
@@ -170,6 +183,13 @@
     housingFeatures.forEach((element)=> {
       element.checked = false;
     });
+    title.removeEventListener(`input`, checkTitle);
+    type.removeEventListener(`change`, checkType);
+    price.removeEventListener(`input`, checkType);
+    capacity.removeEventListener(`change`, checkRoomsValidity);
+    rooms.removeEventListener(`change`, checkRoomsValidity);
+    timeIn.removeEventListener(`change`, checkTimeIn);
+    timeOut.removeEventListener(`change`, checkTimeOut);
     addAttributeDisabled(adFormElements);
     addAttributeDisabled(filtersFormFields);
     addAttributeDisabled(filtersFormSelects);
@@ -199,15 +219,7 @@
   window.backend.load(successHandler, window.backend.errorHandler);
 
   window.form = {
-    checkRoomsValidity,
-    checkTitle,
-    checkType,
-    checkTimeIn,
-    checkTimeOut,
-    activate,
     init,
-    enterPressHandler,
-    mouseMainButtonHandler
   };
 
 })();
