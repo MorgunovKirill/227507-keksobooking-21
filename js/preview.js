@@ -1,40 +1,40 @@
 'use strict';
 
-(function () {
-  const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
-  const imagePreviewHandler = (evt) => {
-    const file = evt.target.files[0];
-    let container = evt.target.closest(`.ad-form-header__upload`);
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
-    if (!container) {
-      container = evt.target.closest(`.ad-form__photo-container`);
-      let newImg = document.createElement(`img`);
-      newImg.width = `40`;
-      newImg.height = `44`;
-      container.querySelector(`.ad-form__photo`).innerHTML = ``;
-      container.querySelector(`.ad-form__photo`).appendChild(newImg);
-    }
+const imagePreviewHandler = (evt) => {
+  const file = evt.target.files[0];
+  let container = evt.target.closest(`.ad-form-header__upload`);
 
-    const image = container.querySelector(`img`);
-    const fileName = file.name.toLowerCase();
+  if (!container) {
+    container = evt.target.closest(`.ad-form__photo-container`);
+    let newImg = document.createElement(`img`);
+    newImg.width = `40`;
+    newImg.height = `44`;
+    container.querySelector(`.ad-form__photo`).innerHTML = ``;
+    container.querySelector(`.ad-form__photo`).appendChild(newImg);
+  }
 
-    const matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
+  const image = container.querySelector(`img`);
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some(function (it) {
+    return fileName.endsWith(it);
+  });
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener(`load`, function () {
+      image.src = reader.result;
     });
 
-    if (matches) {
-      const reader = new FileReader();
+    reader.readAsDataURL(file);
+  }
+};
 
-      reader.addEventListener(`load`, function () {
-        image.src = reader.result;
-      });
+window.preview = {
+  imagePreviewHandler
+};
 
-      reader.readAsDataURL(file);
-    }
-  };
-
-  window.preview = {
-    imagePreviewHandler
-  };
-})();
