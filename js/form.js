@@ -9,6 +9,8 @@
   const VALUE_ANY = `any`;
   const MAIN_PIN_WIDTH = 62;
   const MAIN_PIN_HEIGHT = 62;
+  const MIN_TITLE_LENGTH = 30;
+  const MAX_TITLE_LENGTH = 100;
 
 
   const adForm = document.querySelector(`.ad-form`);
@@ -61,17 +63,17 @@
     });
   };
 
-  const checkTitle = () => {
-    if (title.value.length < 30) {
+  const titleHandler = () => {
+    if (title.value.length < MIN_TITLE_LENGTH) {
       title.setCustomValidity(`минимальная длина - 30 символов`);
-    } else if (title.value.length > 100) {
+    } else if (title.value.length > MAX_TITLE_LENGTH) {
       title.setCustomValidity(`максимальная длина - 100 символов`);
     } else {
       title.setCustomValidity(``);
     }
   };
 
-  const checkType = () => {
+  const typeHandler = () => {
     if (type.value === `bungalow`) {
       price.setAttribute(`placeholder`, `0`);
     }
@@ -92,15 +94,15 @@
     }
   };
 
-  const checkTimeIn = () => {
+  const timeInHandler = () => {
     timeOut.value = timeIn.value;
   };
 
-  const checkTimeOut = () => {
+  const timeOutHandler = () => {
     timeIn.value = timeOut.value;
   };
 
-  const checkRoomsValidity = () => {
+  const roomsValidityHandler = () => {
     if (rooms.value === `${MAX_ROOMS}` && capacity.value !== `0`) {
       capacity.setCustomValidity(`Не для гостей`);
     } else if (rooms.value === `1` && capacity.value !== `1`) {
@@ -147,19 +149,19 @@
     removeAttributeDisabled(filtersFormFields);
     removeAttributeDisabled(filtersFormSelects);
 
-    checkTitle();
-    title.addEventListener(`input`, checkTitle);
+    titleHandler();
+    title.addEventListener(`input`, titleHandler);
 
-    checkType();
-    type.addEventListener(`change`, checkType);
-    price.addEventListener(`input`, checkType);
+    typeHandler();
+    type.addEventListener(`change`, typeHandler);
+    price.addEventListener(`input`, typeHandler);
 
-    checkRoomsValidity();
-    capacity.addEventListener(`change`, checkRoomsValidity);
-    rooms.addEventListener(`change`, checkRoomsValidity);
+    roomsValidityHandler();
+    capacity.addEventListener(`change`, roomsValidityHandler);
+    rooms.addEventListener(`change`, roomsValidityHandler);
 
-    timeIn.addEventListener(`change`, checkTimeIn);
-    timeOut.addEventListener(`change`, checkTimeOut);
+    timeIn.addEventListener(`change`, timeInHandler);
+    timeOut.addEventListener(`change`, timeOutHandler);
 
     filtersForm.classList.remove(`map__filters--disabled`);
   };
@@ -183,13 +185,13 @@
     housingFeatures.forEach((element)=> {
       element.checked = false;
     });
-    title.removeEventListener(`input`, checkTitle);
-    type.removeEventListener(`change`, checkType);
-    price.removeEventListener(`input`, checkType);
-    capacity.removeEventListener(`change`, checkRoomsValidity);
-    rooms.removeEventListener(`change`, checkRoomsValidity);
-    timeIn.removeEventListener(`change`, checkTimeIn);
-    timeOut.removeEventListener(`change`, checkTimeOut);
+    title.removeEventListener(`input`, titleHandler);
+    type.removeEventListener(`change`, typeHandler);
+    price.removeEventListener(`input`, typeHandler);
+    capacity.removeEventListener(`change`, roomsValidityHandler);
+    rooms.removeEventListener(`change`, roomsValidityHandler);
+    timeIn.removeEventListener(`change`, timeInHandler);
+    timeOut.removeEventListener(`change`, timeOutHandler);
     addAttributeDisabled(adFormElements);
     addAttributeDisabled(filtersFormFields);
     addAttributeDisabled(filtersFormSelects);
