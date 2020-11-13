@@ -11,6 +11,7 @@
   const MAIN_PIN_HEIGHT = 62;
   const MIN_TITLE_LENGTH = 30;
   const MAX_TITLE_LENGTH = 100;
+  const PREVIEW_PLACE_HOLDER = `img/muffin-grey.svg`;
 
 
   const adForm = document.querySelector(`.ad-form`);
@@ -35,6 +36,10 @@
   const map = document.querySelector(`.map`);
   const pinPlaces = document.querySelector(`.map__pins`);
   const pin = document.querySelector(`.map__pin--main`);
+  const avatarPreview = document.querySelector(`.ad-form-header__preview`).querySelector(`img`);
+  const avatarChooser = document.querySelector(`#avatar`);
+  let imagePreview = document.querySelector(`.ad-form__photo`).querySelector(`img`);
+  const imagesChooser = document.querySelector(`#images`);
   const initialPinX = parseInt(pin.style.left, 10);
   const initialPinY = parseInt(pin.style.top, 10);
 
@@ -163,6 +168,9 @@
     timeIn.addEventListener(`change`, timeInHandler);
     timeOut.addEventListener(`change`, timeOutHandler);
 
+    avatarChooser.addEventListener(`change`, window.preview.imagePreviewHandler);
+    imagesChooser.addEventListener(`change`, window.preview.imagePreviewHandler);
+
     filtersForm.classList.remove(`map__filters--disabled`);
   };
 
@@ -192,6 +200,13 @@
     rooms.removeEventListener(`change`, roomsValidityHandler);
     timeIn.removeEventListener(`change`, timeInHandler);
     timeOut.removeEventListener(`change`, timeOutHandler);
+    avatarPreview.src = PREVIEW_PLACE_HOLDER;
+    imagePreview = document.querySelector(`.ad-form__photo`).querySelector(`img`);
+    if (imagePreview) {
+      imagePreview.src = PREVIEW_PLACE_HOLDER;
+    }
+    avatarChooser.removeEventListener(`change`, window.preview.imagePreviewHandler);
+    imagesChooser.removeEventListener(`change`, window.preview.imagePreviewHandler);
     addAttributeDisabled(adFormElements);
     addAttributeDisabled(filtersFormFields);
     addAttributeDisabled(filtersFormSelects);
