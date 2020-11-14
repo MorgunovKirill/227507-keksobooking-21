@@ -28,7 +28,7 @@ const createPlace = (place) => {
   let placeElement = placeTemplate.cloneNode(true);
   let placeImg = placeElement.querySelector(`img`);
 
-  placeElement.style.left = `${place.location.x + (PIN_WIDTH / 2)}px`;
+  placeElement.style.left = `${place.location.x - (PIN_WIDTH / 2)}px`;
   placeElement.style.top = `${place.location.y - PIN_HEIGHT}px`;
   placeImg.setAttribute(`src`, place.author.avatar);
   placeImg.setAttribute(`alt`, place.offer.title);
@@ -39,7 +39,7 @@ const createPlace = (place) => {
 const getAddressCoords = (item) => {
   return {
     x: (parseInt(item.style.left, 10) + MAIN_PIN_WIDTH / 2).toFixed(),
-    y: (parseInt(item.style.top, 10) - MAIN_PIN_HEIGHT - MAIN_PIN_POINTER_HEIGHT).toFixed(),
+    y: (parseInt(item.style.top, 10) + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT).toFixed(),
   };
 };
 

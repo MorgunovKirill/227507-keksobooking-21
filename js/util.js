@@ -1,12 +1,11 @@
 'use strict';
 
 
-const ESC_KEYCODE = 27;
 const DEBOUNCE_INTERVAL = 500; // ms
 let lastTimeout;
 
 const isEscEvent = (evt, action) => {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.key === `Escape`) {
     evt.preventDefault();
     action();
   }

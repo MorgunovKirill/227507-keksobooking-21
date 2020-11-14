@@ -185,7 +185,7 @@ const init = () => {
   filtersForm.classList.add(`map__filters--disabled`);
   adForm.classList.add(`ad-form--disabled`);
   adForm.reset();
-  window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY - (MAIN_PIN_HEIGHT / 2)));
+  window.map.setAddress((initialPinX + (MAIN_PIN_WIDTH / 2)), (initialPinY + (MAIN_PIN_HEIGHT / 2)));
   housingType.value = VALUE_ANY;
   housingPrice.value = VALUE_ANY;
   housingRooms.value = VALUE_ANY;
